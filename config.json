@@ -1,0 +1,20 @@
+{
+    "project_path": "",
+    "update_interval": 60,
+    "max_depth": 3,
+    "ignored_directories": [
+        "__pycache__",
+        "node_modules",
+        "venv",
+        ".git",
+        ".idea",
+        ".vscode",
+        "dist",
+        "build"
+    ],
+    "ignored_files": [
+        ".DS_Store",
+        "*.pyc",
+        "*.pyo"
+    ]
+} 
