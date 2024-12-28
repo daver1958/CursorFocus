@@ -1,5 +1,5 @@
 {
-    "project_path": "",
+    "project_path": "/Users/drorbengal/test1212",
     "update_interval": 60,
     "max_depth": 3,
     "ignored_directories": [
@@ -17,4 +17,4 @@
         "*.pyc",
         "*.pyo"
     ]
-} 
+}
