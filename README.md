@@ -2,6 +2,8 @@
 
 A lightweight tool that maintains a focused view of your project structure and environment. CursorFocus automatically tracks your project files, functions, and environment variables, updating every 60 seconds to keep you informed of changes.
 
+Check out our [SHOWCASE.md](SHOWCASE.md) for detailed examples and real-world use cases!
+
 ## Features
 
 - 🔄 Real-time project structure tracking
