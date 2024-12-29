@@ -32,6 +32,52 @@ Check out our [SHOWCASE.md](SHOWCASE.md) for detailed examples and real-world us
    python3 focus.py
    ```
 
+## Automatic Startup (macOS)
+
+To have CursorFocus start automatically when you log in:
+
+1. Create a LaunchAgent configuration:
+   ```bash
+   mkdir -p ~/Library/LaunchAgents
+   ```
+
+2. Create the file `~/Library/LaunchAgents/com.cursorfocus.plist` with:
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+   <plist version="1.0">
+   <dict>
+       <key>Label</key>
+       <string>com.cursorfocus</string>
+       <key>ProgramArguments</key>
+       <array>
+           <string>/usr/local/bin/python3</string>
+           <string>/path/to/your/CursorFocus/focus.py</string>
+       </array>
+       <key>RunAtLoad</key>
+       <true/>
+       <key>StandardOutPath</key>
+       <string>/tmp/cursorfocus.log</string>
+       <key>StandardErrorPath</key>
+       <string>/tmp/cursorfocus.err</string>
+       <key>KeepAlive</key>
+       <true/>
+   </dict>
+   </plist>
+   ```
+   
+   Replace `/path/to/your/CursorFocus/focus.py` with the actual path to your focus.py file.
+
+3. Load the LaunchAgent:
+   ```bash
+   launchctl load ~/Library/LaunchAgents/com.cursorfocus.plist
+   ```
+
+4. To stop the automatic startup:
+   ```bash
+   launchctl unload ~/Library/LaunchAgents/com.cursorfocus.plist
+   ```
+
 ## Output
 
 CursorFocus generates a `Focus.md` file in your project root with:
