@@ -8,6 +8,7 @@ from config import (
     FUNCTION_PATTERNS,
     IGNORED_KEYWORDS
 )
+import logging
 
 def get_combined_pattern():
     """Combine all function patterns into a single regex pattern."""
@@ -346,3 +347,22 @@ def analyze_file_content(file_path):
     except Exception as e:
         print(f"Error analyzing file {file_path}: {e}")
         return [], 0 
+
+class RulesAnalyzer:
+    def __init__(self, project_path):
+        self.project_path = project_path
+
+    def analyze_project_for_rules(self):
+        """Analyze project for .cursorrules generation"""
+        try:
+            project_info = {
+                "name": self.detect_project_name(),
+                "version": self.detect_version(),
+                "language": self.detect_main_language(),
+                "framework": self.detect_framework(),
+                "type": self.determine_project_type()
+            }
+            return project_info
+        except Exception as e:
+            logging.error(f"Error analyzing project for rules: {e}")
+            return self.get_default_project_info() 

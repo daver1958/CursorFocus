@@ -13,6 +13,23 @@ Check out our [SHOWCASE.md](SHOWCASE.md) for detailed examples and real-world us
 - 🎯 Project-specific information detection
 - 🔍 Smart project type detection (Chrome Extension, Node.js, Python)
 - 🧩 Modular and extensible design
+- 🎛️ Automatic .cursorrules generation and project adaptation
+
+## Generated Files
+
+CursorFocus automatically generates and maintains three key files:
+
+1. **Focus.md**: Project documentation and analysis
+   - Project overview and structure
+   - File descriptions and metrics
+   - Function documentation
+   
+2. **.cursorrules**: Project-specific Cursor settings
+   - Automatically generated based on project type
+   - Customized for your project's structure
+   - Updates as your project evolves
+   
+
 
 ## Setup
 

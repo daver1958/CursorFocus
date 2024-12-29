@@ -2,10 +2,10 @@
 import os
 import json
 import argparse
+import logging
 
 def create_launch_agent(project_path, python_path='/usr/local/bin/python3'):
     """Create and install the LaunchAgent plist file."""
-    # Get user's home directory
     home = os.path.expanduser('~')
     launch_agents_dir = os.path.join(home, 'Library/LaunchAgents')
     plist_path = os.path.join(launch_agents_dir, 'com.cursorfocus.plist')
@@ -49,9 +49,6 @@ def create_launch_agent(project_path, python_path='/usr/local/bin/python3'):
     # Set proper permissions
     os.chmod(plist_path, 0o644)
     
-    # Load the launch agent
-    os.system(f'launchctl load {plist_path}')
-    
     return plist_path
 
 def setup_cursorfocus():
@@ -69,53 +66,24 @@ def setup_cursorfocus():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(script_dir, 'config.json')
     
-    # Load existing config if it exists
-    if os.path.exists(config_path):
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-    else:
-        config = {
-            "project_path": "",
-            "update_interval": 60,
-            "max_depth": 3,
-            "ignored_directories": [
-                "__pycache__",
-                "node_modules",
-                "venv",
-                ".git",
-                ".idea",
-                ".vscode",
-                "dist",
-                "build"
-            ],
-            "ignored_files": [
-                ".DS_Store",
-                "*.pyc",
-                "*.pyo"
-            ]
-        }
+    # Load or create config
+    config = load_or_create_config(config_path)
     
     # Update config with command line arguments
-    if args.project:
-        config["project_path"] = os.path.abspath(args.project)
-    if args.interval:
-        config["update_interval"] = args.interval
-    if args.depth:
-        config["max_depth"] = args.depth
+    update_config_from_args(config, args)
     
     # Save the config
-    with open(config_path, 'w') as f:
-        json.dump(config, f, indent=4)
+    save_config(config_path, config)
     
     # Install LaunchAgent if requested
     if args.install_agent:
         try:
-            if not os.path.exists('/usr/local/bin/python3'):
+            python_path = args.python_path or '/usr/local/bin/python3'
+            if not os.path.exists(python_path):
                 print("⚠️  Warning: Default Python path not found. Please specify with --python-path")
                 return
             
-            python_path = args.python_path or '/usr/local/bin/python3'
-            plist_path = create_launch_agent(os.path.dirname(os.path.abspath(__file__)), python_path)
+            plist_path = create_launch_agent(script_dir, python_path)
             print(f"\n✅ LaunchAgent installed at: {plist_path}")
             print("CursorFocus will now start automatically at login")
             print("\nTo start now:")
@@ -132,6 +100,50 @@ def setup_cursorfocus():
     print(f"🔍 Max depth: {config['max_depth']} levels")
     print("\nTo start monitoring, run:")
     print(f"python3 {os.path.join(script_dir, 'focus.py')}")
+
+def load_or_create_config(config_path):
+    """Load existing config or create default one."""
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    return get_default_config()
+
+def get_default_config():
+    """Return default configuration."""
+    return {
+        "project_path": "",
+        "update_interval": 60,
+        "max_depth": 3,
+        "ignored_directories": [
+            "__pycache__",
+            "node_modules",
+            "venv",
+            ".git",
+            ".idea",
+            ".vscode",
+            "dist",
+            "build"
+        ],
+        "ignored_files": [
+            ".DS_Store",
+            "*.pyc",
+            "*.pyo"
+        ]
+    }
+
+def update_config_from_args(config, args):
+    """Update config with command line arguments."""
+    if args.project:
+        config["project_path"] = os.path.abspath(args.project)
+    if args.interval:
+        config["update_interval"] = args.interval
+    if args.depth:
+        config["max_depth"] = args.depth
+
+def save_config(config_path, config):
+    """Save configuration to file."""
+    with open(config_path, 'w') as f:
+        json.dump(config, f, indent=4)
 
 if __name__ == '__main__':
     setup_cursorfocus() 
