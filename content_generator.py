@@ -2,10 +2,41 @@ import os
 from datetime import datetime
 from analyzers import analyze_file_content, should_ignore_file, is_binary_file
 from project_detector import detect_project_type, get_project_description, get_file_type_info
-from config import get_file_length_limit
+from config import get_file_length_limit, load_config
+
+class ProjectMetrics:
+    def __init__(self):
+        self.total_files = 0
+        self.total_lines = 0
+        self.files_by_type = {}
+        self.lines_by_type = {}
+        self.alerts = {
+            'warning': 0,
+            'critical': 0,
+            'severe': 0
+        }
+        self.duplicate_functions = 0
+
+def get_file_length_alert(line_count, limit, thresholds):
+    """Get alert level based on file length and thresholds."""
+    ratio = line_count / limit
+    if ratio >= thresholds.get('severe', 2.0):
+        return 'severe', f"🚨 Critical-Length Alert: File is more than {int(thresholds['severe']*100)}% of recommended length"
+    elif ratio >= thresholds.get('critical', 1.5):
+        return 'critical', f"⚠️ High-Length Alert: File is more than {int(thresholds['critical']*100)}% of recommended length"
+    elif ratio >= thresholds.get('warning', 1.0):
+        return 'warning', f"📄 Length Alert: File exceeds recommended length"
+    return None, None
 
 def generate_focus_content(project_path, config):
     """Generate the Focus file content."""
+    metrics = ProjectMetrics()
+    thresholds = config.get('file_length_thresholds', {
+        'warning': 1.0,
+        'critical': 1.5,
+        'severe': 2.0
+    })
+    
     project_type = detect_project_type(project_path)
     project_info = get_project_description(project_path)
     
@@ -53,8 +84,10 @@ def generate_focus_content(project_path, config):
             
             if is_binary_file(file_path):
                 continue
-            
+                
+            metrics.total_files += 1
             functions, line_count = analyze_file_content(file_path)
+            
             if functions or line_count > 0:
                 if not first_file:
                     content.append("")
@@ -65,17 +98,42 @@ def generate_focus_content(project_path, config):
                 content.append(f"`{rel_path}` ({line_count} lines)")
                 content.append(f"**Main Responsibilities:** {file_desc}")
                 
+                # Update metrics
+                ext = os.path.splitext(file)[1].lower()
+                metrics.files_by_type[ext] = metrics.files_by_type.get(ext, 0) + 1
+                metrics.lines_by_type[ext] = metrics.lines_by_type.get(ext, 0) + line_count
+                metrics.total_lines += line_count
+                
                 if functions:
                     content.append("**Key Functions:**")
                     for func_name, description in functions:
                         content.append(f"<{func_name}>: {description}")
+                        if "Duplicate Alert" in description:
+                            metrics.duplicate_functions += 1
                 
-                # Get file-specific length limit
+                # Get file-specific length limit and check thresholds
                 length_limit = get_file_length_limit(file_path)
-                if line_count > length_limit:
-                    content.append(f"**📄 Long-file Alert: File exceeds the recommended {length_limit} lines for {os.path.splitext(file)[1]} files ({line_count} lines)**")
+                alert_level, alert_message = get_file_length_alert(line_count, length_limit, thresholds)
+                if alert_level:
+                    metrics.alerts[alert_level] += 1
+                    content.append(f"**{alert_message} ({line_count} lines vs. recommended {length_limit})**")
     
+    # Add metrics summary
     content.extend([
+        "",
+        "# Project Metrics Summary",
+        f"Total Files: {metrics.total_files}",
+        f"Total Lines: {metrics.total_lines:,}",
+        "",
+        "**Files by Type:**",
+        *[f"- {ext}: {count} files ({metrics.lines_by_type[ext]:,} lines)" 
+          for ext, count in sorted(metrics.files_by_type.items())],
+        "",
+        "**Code Quality Alerts:**",
+        f"- 🚨 Severe Length Issues: {metrics.alerts['severe']} files",
+        f"- ⚠️ Critical Length Issues: {metrics.alerts['critical']} files",
+        f"- 📄 Length Warnings: {metrics.alerts['warning']} files",
+        f"- 🔄 Duplicate Functions: {metrics.duplicate_functions}",
         "",
         f"Last updated: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}"
     ])
