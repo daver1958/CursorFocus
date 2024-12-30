@@ -15,6 +15,98 @@ Check out our [SHOWCASE.md](SHOWCASE.md) for detailed examples and real-world us
 - 🧩 Modular and extensible design
 - 🎛️ Automatic .cursorrules generation and project adaptation
 
+## Quick Start
+
+1. Clone CursorFocus into your project:
+   ```bash
+   git clone https://github.com/Dror-Bengal/CursorFocus.git
+   ```
+
+2. Make the run script executable:
+   ```bash
+   chmod +x CursorFocus/run.sh
+   ```
+
+3. Start CursorFocus:
+   ```bash
+   ./CursorFocus/run.sh
+   ```
+
+That's it! CursorFocus will automatically:
+- Create necessary configuration
+- Install dependencies
+- Start monitoring your project
+- Generate Focus.md documentation
+
+## Multi-Project Support
+
+CursorFocus can monitor multiple projects simultaneously. There are two ways to set this up:
+
+### 1. Automatic Project Detection
+
+Run CursorFocus with the scan option to automatically detect projects:
+```bash
+python3 CursorFocus/setup.py --scan /path/to/projects/directory
+```
+
+This will:
+- Scan the directory for supported project types
+- List all detected projects
+- Let you choose which projects to monitor
+
+### 2. Manual Configuration
+
+Edit `config.json` to add multiple projects:
+```json
+{
+    "projects": [
+        {
+            "name": "Project 1",
+            "project_path": "/path/to/project1",
+            "type": "node_js",
+            "watch": true
+        },
+        {
+            "name": "Project 2",
+            "project_path": "/path/to/project2",
+            "type": "chrome_extension",
+            "watch": true
+        }
+    ]
+}
+```
+
+Each project can have its own:
+- Custom update interval
+- Ignored patterns
+- File length standards
+- Project-specific rules
+
+### Project Types Supported:
+- Chrome Extensions (detected by manifest.json)
+- Node.js Projects (detected by package.json)
+- Python Projects (detected by setup.py or pyproject.toml)
+- React Applications (detected by src/App.js)
+- Generic Projects (basic structure)
+
+## Alternative Setup Methods
+
+### Manual Setup
+
+If you prefer to set up manually:
+
+1. Install dependencies (Python 3.6+ required):
+   ```bash
+   cd CursorFocus
+   pip install -r requirements.txt
+   ```
+
+2. Create/edit config.json (optional)
+3. Run the script:
+   ```bash
+   python3 focus.py
+   ```
+
 ## Generated Files
 
 CursorFocus automatically generates and maintains three key files:
