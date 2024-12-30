@@ -116,56 +116,82 @@ def setup_cursor_focus(project_path):
         print(f"❌ Error during setup: {e}")
         raise
 
+def monitor_project(project_config, global_config):
+    """Monitor a single project."""
+    project_path = project_config['project_path']
+    print(f"\n🔍 Monitoring project: {project_config['name']} at {project_path}")
+    
+    # Merge project config with global config
+    config = {**global_config, **project_config}
+    
+    focus_file = os.path.join(project_path, 'Focus.md')
+    last_content = None
+    last_update = 0
+
+    while True:
+        current_time = time.time()
+        
+        if current_time - last_update < config.get('update_interval', 60):
+            time.sleep(1)
+            continue
+            
+        content = generate_focus_content(project_path, config)
+        
+        if content != last_content:
+            try:
+                with open(focus_file, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                last_content = content
+                print(f"✅ {project_config['name']} Focus.md updated at {datetime.now().strftime('%I:%M:%S %p')}")
+            except Exception as e:
+                print(f"❌ Error writing Focus.md for {project_config['name']}: {e}")
+        
+        last_update = current_time
+
 def main():
-    """Main function to generate and update the focus file."""
-    # Try to load config, use defaults if not found
+    """Main function to monitor multiple projects."""
     config = load_config()
     if not config:
         print("No config.json found, using default configuration")
         config = get_default_config()
 
-    project_path = config['project_path']
-    print(f"Project path: {project_path}")
+    if 'projects' not in config:
+        # Handle single project config for backward compatibility
+        config['projects'] = [{
+            'name': 'Default Project',
+            'project_path': config['project_path'],
+            'update_interval': config.get('update_interval', 60),
+            'max_depth': config.get('max_depth', 3)
+        }]
 
-    # If this is the first run, set up the necessary files
-    rules_file = os.path.join(project_path, '.cursorrules')
-    if not os.path.exists(rules_file):
-        setup_cursor_focus(project_path)
-
-    print(f"\n🔍 CursorFocus is monitoring: {project_path}")
-    print("📝 Press Ctrl+C to stop")
-
-    # Monitor and update Focus.md
-    focus_file = os.path.join(project_path, 'Focus.md')
-    last_content = None
-    last_update = 0
-
+    # Create threads for each project
+    from threading import Thread
+    threads = []
+    
     try:
+        for project in config['projects']:
+            # Setup project if needed
+            rules_file = os.path.join(project['project_path'], '.cursorrules')
+            if not os.path.exists(rules_file):
+                setup_cursor_focus(project['project_path'])
+
+            # Start monitoring thread
+            thread = Thread(
+                target=monitor_project,
+                args=(project, config),
+                daemon=True
+            )
+            thread.start()
+            threads.append(thread)
+
+        print("\n📝 Press Ctrl+C to stop all monitors")
+        
+        # Keep main thread alive
         while True:
-            current_time = time.time()
-            
-            # Only check for updates every update_interval seconds
-            if current_time - last_update < config.get('update_interval', 60):
-                time.sleep(1)  # Sleep for 1 second to prevent CPU overuse
-                continue
-                
-            # Generate new content
-            content = generate_focus_content(project_path, config)
-            
-            # Only write if content has changed
-            if content != last_content:
-                try:
-                    with open(focus_file, 'w', encoding='utf-8') as f:
-                        f.write(content)
-                    last_content = content
-                    print(f"✅ Focus.md updated at {datetime.now().strftime('%I:%M:%S %p')}")
-                except Exception as e:
-                    print(f"❌ Error writing Focus.md: {e}")
-            
-            last_update = current_time
+            time.sleep(1)
             
     except KeyboardInterrupt:
-        print("\n👋 Stopping CursorFocus")
+        print("\n👋 Stopping all CursorFocus monitors")
     except Exception as e:
         print(f"\n❌ Error: {e}")
 
