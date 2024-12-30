@@ -3,6 +3,7 @@ import os
 import json
 import argparse
 import logging
+from project_detector import scan_for_projects
 
 def create_launch_agent(project_path, python_path='/usr/local/bin/python3'):
     """Create and install the LaunchAgent plist file."""
@@ -58,10 +59,14 @@ def setup_cursorfocus():
     parser.add_argument('--names', '-n', nargs='+', help='Names for the projects (optional)')
     parser.add_argument('--intervals', '-i', nargs='+', type=int, help='Update intervals in seconds for each project')
     parser.add_argument('--depths', '-d', nargs='+', type=int, help='Maximum directory depths for each project')
-    parser.add_argument('--install-agent', '-a', action='store_true', help='Install LaunchAgent for automatic startup')
+    parser.add_argument('--install-agent', '-I', action='store_true', help='Install LaunchAgent for automatic startup')
     parser.add_argument('--list', '-l', action='store_true', help='List all configured projects')
     parser.add_argument('--remove', '-r', nargs='+', help='Remove projects by name or index')
     parser.add_argument('--clear', '-c', action='store_true', help='Remove all projects')
+    parser.add_argument('--scan', '-s', nargs='?', const='.', 
+                       help='Scan directory for projects. If no path provided, scans current directory')
+    parser.add_argument('--scan-depth', type=int, default=3, help='Maximum depth for project scanning')
+    parser.add_argument('--auto-add', '-a', action='store_true', help='Automatically add all found projects')
     
     args = parser.parse_args()
     
@@ -87,6 +92,86 @@ def setup_cursorfocus():
     if args.remove:
         remove_projects(config, args.remove)
         save_config(config_path, config)
+        return
+
+    # Handle scan option
+    if args.scan is not None:
+        scan_path = os.path.abspath(args.scan) if args.scan else os.getcwd()
+        
+        print(f"\n🔍 Scanning for projects in: {scan_path}")
+        found_projects = scan_for_projects(scan_path, args.scan_depth)
+        
+        if not found_projects:
+            print("No projects found.")
+            return
+            
+        print(f"\nFound {len(found_projects)} projects:")
+        for i, project in enumerate(found_projects, 1):
+            print(f"\n  {i}. {project['name']} ({project['type']})")
+            print(f"     Path: {project['path']}")
+        
+        if args.auto_add:
+            # Automatically add all found projects
+            added = 0
+            for project in found_projects:
+                if not any(p['project_path'] == project['path'] for p in config['projects']):
+                    config['projects'].append({
+                        'name': project['name'],
+                        'project_path': project['path'],
+                        'update_interval': 60,
+                        'max_depth': 3
+                    })
+                    added += 1
+            print(f"\n✅ Added {added} new projects to configuration")
+        else:
+            # Ask which projects to add
+            print("\nSelect projects to add (enter numbers separated by space, 'all', or 'q' to quit):")
+            try:
+                selection = input("> ").strip().lower()
+                
+                if selection in ['q', 'quit', 'exit']:
+                    print("\n❌ Operation cancelled.")
+                    return
+                    
+                if selection == 'all':
+                    indices = range(len(found_projects))
+                else:
+                    try:
+                        indices = [int(i) - 1 for i in selection.split()]
+                        # Validate indices
+                        if any(i < 0 or i >= len(found_projects) for i in indices):
+                            print("\n❌ Invalid project number(s). Operation cancelled.")
+                            return
+                    except ValueError:
+                        print("\n❌ Invalid input. Operation cancelled.")
+                        return
+                
+                # Add selected projects
+                added = 0
+                for idx in indices:
+                    project = found_projects[idx]
+                    if not any(p['project_path'] == project['path'] for p in config['projects']):
+                        config['projects'].append({
+                            'name': project['name'],
+                            'project_path': project['path'],
+                            'update_interval': 60,
+                            'max_depth': 3
+                        })
+                        added += 1
+                    else:
+                        print(f"\n⚠️  Project already exists: {project['name']}")
+                
+                if added > 0:
+                    print(f"\n✅ Added {added} new projects to configuration")
+                else:
+                    print("\n⚠️  No new projects were added")
+                    
+            except KeyboardInterrupt:
+                print("\n\n❌ Operation cancelled.")
+                return
+        
+        if config['projects']:  # Only save if we have projects
+            save_config(config_path, config)
         return
 
     # Add/update projects
