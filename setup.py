@@ -52,26 +52,82 @@ def create_launch_agent(project_path, python_path='/usr/local/bin/python3'):
     return plist_path
 
 def setup_cursorfocus():
-    """Set up CursorFocus for a project."""
-    parser = argparse.ArgumentParser(description='Set up CursorFocus for your project')
-    parser.add_argument('--project', '-p', help='Path to the project to monitor (default: parent directory)')
-    parser.add_argument('--interval', '-i', type=int, help='Update interval in seconds (default: 60)')
-    parser.add_argument('--depth', '-d', type=int, help='Maximum directory depth to scan (default: 3)')
+    """Set up CursorFocus for multiple projects."""
+    parser = argparse.ArgumentParser(description='Set up CursorFocus for your projects')
+    parser.add_argument('--projects', '-p', nargs='+', help='Paths to projects to monitor')
+    parser.add_argument('--names', '-n', nargs='+', help='Names for the projects (optional)')
+    parser.add_argument('--intervals', '-i', nargs='+', type=int, help='Update intervals in seconds for each project')
+    parser.add_argument('--depths', '-d', nargs='+', type=int, help='Maximum directory depths for each project')
     parser.add_argument('--install-agent', '-a', action='store_true', help='Install LaunchAgent for automatic startup')
-    parser.add_argument('--python-path', help='Path to Python interpreter (default: /usr/local/bin/python3)')
+    parser.add_argument('--list', '-l', action='store_true', help='List all configured projects')
+    parser.add_argument('--remove', '-r', nargs='+', help='Remove projects by name or index')
+    parser.add_argument('--clear', '-c', action='store_true', help='Remove all projects')
     
     args = parser.parse_args()
     
-    # Get the script directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(script_dir, 'config.json')
     
-    # Load or create config
     config = load_or_create_config(config_path)
     
-    # Update config with command line arguments
-    update_config_from_args(config, args)
-    
+    if 'projects' not in config:
+        config['projects'] = []
+
+    if args.list:
+        list_projects(config['projects'])
+        return
+
+    if args.clear:
+        if confirm_action("Are you sure you want to remove all projects?"):
+            config['projects'] = []
+            save_config(config_path, config)
+            print("\n✅ All projects have been removed.")
+        return
+
+    if args.remove:
+        remove_projects(config, args.remove)
+        save_config(config_path, config)
+        return
+
+    # Add/update projects
+    if args.projects:
+        # Validate project paths first
+        valid_projects = []
+        for i, project_path in enumerate(args.projects):
+            abs_path = os.path.abspath(project_path)
+            if not os.path.exists(abs_path):
+                print(f"\n⚠️  Warning: Project path does not exist: {abs_path}")
+                continue
+                
+            project_config = {
+                'name': args.names[i] if args.names and i < len(args.names) else f"Project {i+1}",
+                'project_path': abs_path,
+                'update_interval': args.intervals[i] if args.intervals and i < len(args.intervals) else 60,
+                'max_depth': args.depths[i] if args.depths and i < len(args.depths) else 3
+            }
+            valid_projects.append(project_config)
+            
+        # Check for duplicate names
+        names = [p['name'] for p in valid_projects]
+        if len(names) != len(set(names)):
+            print("\n⚠️  Warning: Duplicate project names found. Adding unique suffixes...")
+            name_counts = {}
+            for project in valid_projects:
+                base_name = project['name']
+                if base_name in name_counts:
+                    name_counts[base_name] += 1
+                    project['name'] = f"{base_name} ({name_counts[base_name]})"
+                else:
+                    name_counts[base_name] = 1
+        
+        # Update existing projects or add new ones
+        for project in valid_projects:
+            existing = next((p for p in config['projects'] if p['project_path'] == project['project_path']), None)
+            if existing:
+                existing.update(project)
+            else:
+                config['projects'].append(project)
+
     # Save the config
     save_config(config_path, config)
     
@@ -95,10 +151,14 @@ def setup_cursorfocus():
             print("Please check permissions and try again")
     
     print("\n✅ CursorFocus configuration updated!")
-    print(f"📁 Project path: {config['project_path'] or 'Parent directory'}")
-    print(f"⏱️  Update interval: {config['update_interval']} seconds")
-    print(f"🔍 Max depth: {config['max_depth']} levels")
-    print("\nTo start monitoring, run:")
+    print("\n📁 Configured projects:")
+    for project in config['projects']:
+        print(f"\n  • {project['name']}:")
+        print(f"    Path: {project['project_path']}")
+        print(f"    Update interval: {project['update_interval']} seconds")
+        print(f"    Max depth: {project['max_depth']} levels")
+    
+    print("\nTo start monitoring all projects, run:")
     print(f"python3 {os.path.join(script_dir, 'focus.py')}")
 
 def load_or_create_config(config_path):
@@ -111,9 +171,7 @@ def load_or_create_config(config_path):
 def get_default_config():
     """Return default configuration."""
     return {
-        "project_path": "",
-        "update_interval": 60,
-        "max_depth": 3,
+        "projects": [],
         "ignored_directories": [
             "__pycache__",
             "node_modules",
@@ -131,19 +189,68 @@ def get_default_config():
         ]
     }
 
-def update_config_from_args(config, args):
-    """Update config with command line arguments."""
-    if args.project:
-        config["project_path"] = os.path.abspath(args.project)
-    if args.interval:
-        config["update_interval"] = args.interval
-    if args.depth:
-        config["max_depth"] = args.depth
-
 def save_config(config_path, config):
     """Save configuration to file."""
     with open(config_path, 'w') as f:
         json.dump(config, f, indent=4)
+
+def list_projects(projects):
+    """Display list of configured projects."""
+    if not projects:
+        print("\n📁 No projects configured.")
+        return
+        
+    print("\n📁 Configured projects:")
+    for i, project in enumerate(projects, 1):
+        print(f"\n  {i}. {project['name']}:")
+        print(f"     Path: {project['project_path']}")
+        print(f"     Update interval: {project['update_interval']} seconds")
+        print(f"     Max depth: {project['max_depth']} levels")
+
+def remove_projects(config, targets):
+    """Remove specific projects by name or index."""
+    if not config['projects']:
+        print("\n⚠️ No projects configured.")
+        return
+        
+    remaining_projects = []
+    removed = []
+    
+    for project in config['projects']:
+        should_keep = True
+        
+        for target in targets:
+            # Check if target is an index
+            try:
+                idx = int(target)
+                if idx == config['projects'].index(project) + 1:
+                    should_keep = False
+                    removed.append(project['name'])
+                    break
+            except ValueError:
+                # Target is a name
+                if project['name'].lower() == target.lower():
+                    should_keep = False
+                    removed.append(project['name'])
+                    break
+                    
+        if should_keep:
+            remaining_projects.append(project)
+    
+    if removed:
+        config['projects'] = remaining_projects
+        print(f"\n✅ Removed projects: {', '.join(removed)}")
+    else:
+        print("\n⚠️ No matching projects found.")
+
+def confirm_action(message):
+    """Ask for user confirmation."""
+    while True:
+        response = input(f"\n{message} (y/n): ").lower()
+        if response in ['y', 'yes']:
+            return True
+        if response in ['n', 'no']:
+            return False
 
 if __name__ == '__main__':
     setup_cursorfocus() 
