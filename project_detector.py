@@ -139,7 +139,15 @@ def get_file_type_info(filename):
         '.json': ('JSON', 'Configuration or data file'),
         '.php': ('PHP Source', 'PHP script for server-side functionality'),
         '.phtml': ('PHP Template', 'PHP template file'),
-        '.ctp': ('CakePHP Template', 'CakePHP view template')
+        '.ctp': ('CakePHP Template', 'CakePHP view template'),
+        '.cpp': ('C++ Source', 'C++ implementation file'),
+        '.hpp': ('C++ Header', 'C++ header file'),
+        '.cc': ('C++ Source', 'C++ implementation file'),
+        '.cxx': ('C++ Source', 'C++ implementation file'),
+        '.c': ('C Source', 'C implementation file'),
+        '.h': ('C/C++ Header', 'Header file'),
+        '.cs': ('C# Source', 'C# implementation file'),
+        '.cshtml': ('Razor View', 'ASP.NET Core view template')
     }
     
     return type_map.get(ext, ('Generic', 'Project file')) 

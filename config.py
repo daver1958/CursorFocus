@@ -93,7 +93,10 @@ FUNCTION_PATTERNS = {
     'class_method': r'(?:^|\s+)(?:async\s+)?(\w+)\s*\([^)]*\)\s*{',
     'object_property': r'(\w+)\s*:\s*(?:\([^)]*\)|[^=])\s*=>',
     'php_function': r'(?:public\s+|private\s+|protected\s+)?function\s+(\w+)\s*\(',
-    'php_class_method': r'(?:public\s+|private\s+|protected\s+)function\s+(\w+)\s*\('
+    'php_class_method': r'(?:public\s+|private\s+|protected\s+)function\s+(\w+)\s*\(',
+    'cpp_function': r'(?:virtual\s+)?(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:::\w+)*\s+)?(\w+)\s*\([^)]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:final\s*)?(?:=\s*0\s*)?(?:=\s*default\s*)?(?:=\s*delete\s*)?(?:{|;)',
+    'csharp_method': r'(?:public|private|protected|internal|static|virtual|override|abstract|sealed|async)\s+(?:\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)',
+    'c_function': r'(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:\s*\*)*\s+)?(\w+)\s*\([^)]*\)\s*(?:{|;)'
 }
 
 # Keywords that should not be treated as function names

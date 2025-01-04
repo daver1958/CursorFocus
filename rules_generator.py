@@ -132,6 +132,27 @@ class RulesGenerator:
                 'follow PSR standards',
                 'use type declarations',
                 'implement proper error handling'
+            ],
+            'cpp': [
+                'follow modern C++ guidelines',
+                'use RAII principles',
+                'prefer smart pointers over raw pointers',
+                'use const correctness',
+                'leverage STL containers and algorithms'
+            ],
+            'csharp': [
+                'follow C# coding conventions',
+                'use LINQ when appropriate',
+                'implement IDisposable pattern when needed',
+                'use async/await for asynchronous operations',
+                'prefer properties over public fields'
+            ],
+            'c': [
+                'follow C coding standards',
+                'use proper memory management',
+                'implement error handling with return codes',
+                'use header guards',
+                'avoid global variables'
             ]
         }
         return language_rules.get(language.lower(), [])
@@ -167,6 +188,35 @@ class RulesGenerator:
                         testing_frameworks.append('pytest')
                     if 'unittest' in content:
                         testing_frameworks.append('unittest')
+            except:
+                pass
+
+        # Check for C++ testing frameworks
+        if os.path.exists(os.path.join(self.project_path, 'CMakeLists.txt')):
+            try:
+                with open(os.path.join(self.project_path, 'CMakeLists.txt'), 'r') as f:
+                    content = f.read().lower()
+                    if 'gtest' in content:
+                        testing_frameworks.append('googletest')
+                    if 'catch2' in content:
+                        testing_frameworks.append('catch2')
+                    if 'boost_test' in content:
+                        testing_frameworks.append('boost.test')
+            except:
+                pass
+
+        # Check for C# testing frameworks
+        csproj_files = [f for f in os.listdir(self.project_path) if f.endswith('.csproj')]
+        for csproj in csproj_files:
+            try:
+                with open(os.path.join(self.project_path, csproj), 'r') as f:
+                    content = f.read().lower()
+                    if 'xunit' in content:
+                        testing_frameworks.append('xunit')
+                    if 'nunit' in content:
+                        testing_frameworks.append('nunit')
+                    if 'mstest' in content:
+                        testing_frameworks.append('mstest')
             except:
                 pass
 

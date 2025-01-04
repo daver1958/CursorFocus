@@ -70,7 +70,16 @@ class RulesAnalyzer:
             '.java': 'java',
             '.rb': 'ruby',
             '.php': 'php',
-            '.go': 'go'
+            '.go': 'go',
+            '.cpp': 'cpp',
+            '.cc': 'cpp',
+            '.cxx': 'cpp',
+            '.c': 'c',
+            '.h': 'c',
+            '.hpp': 'cpp',
+            '.hxx': 'cpp',
+            '.cs': 'csharp',
+            '.cshtml': 'csharp'
         }
 
         # Find the most common language
@@ -146,6 +155,38 @@ class RulesAnalyzer:
         # Check for WordPress
         if os.path.exists(os.path.join(self.project_path, 'wp-config.php')):
             return 'wordpress'
+
+        # Check for C++ frameworks
+        cmake_path = os.path.join(self.project_path, 'CMakeLists.txt')
+        if os.path.exists(cmake_path):
+            try:
+                with open(cmake_path, 'r') as f:
+                    content = f.read().lower()
+                    if 'qt' in content:
+                        return 'qt'
+                    if 'boost' in content:
+                        return 'boost'
+                    if 'opencv' in content:
+                        return 'opencv'
+            except:
+                pass
+
+        # Check for C# frameworks
+        csproj_files = [f for f in os.listdir(self.project_path) if f.endswith('.csproj')]
+        for csproj in csproj_files:
+            try:
+                with open(os.path.join(self.project_path, csproj), 'r') as f:
+                    content = f.read().lower()
+                    if 'microsoft.aspnetcore' in content:
+                        return 'asp.net core'
+                    if 'microsoft.net.sdk.web' in content:
+                        return 'asp.net core'
+                    if 'xamarin' in content:
+                        return 'xamarin'
+                    if 'microsoft.maui' in content:
+                        return 'maui'
+            except:
+                pass
 
         return 'none'
 
