@@ -57,6 +57,9 @@ def get_default_config():
             '.toml': 100,
             '.md': 500,
             '.rst': 500,
+            '.php': 400,
+            '.phtml': 300,
+            '.ctp': 300,
             'default': 300
         },
         'file_length_thresholds': {
@@ -84,6 +87,21 @@ def get_default_config():
                 'indicators': [],
                 'required_files': ['src/App.js', 'src/index.js'],
                 'description': 'React Application'
+            },
+            'php': {
+                'indicators': ['composer.json', 'index.php'],
+                'required_files': [],
+                'description': 'PHP Project'
+            },
+            'laravel': {
+                'indicators': ['artisan'],
+                'required_files': [],
+                'description': 'Laravel Project'
+            },
+            'wordpress': {
+                'indicators': ['wp-config.php'],
+                'required_files': [],
+                'description': 'WordPress Project'
             }
         }
     }

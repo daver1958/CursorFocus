@@ -136,7 +136,10 @@ def get_file_type_info(filename):
         '.html': ('HTML', 'Web page template'),
         '.css': ('CSS', 'Stylesheet for visual styling'),
         '.md': ('Markdown', 'Documentation file'),
-        '.json': ('JSON', 'Configuration or data file')
+        '.json': ('JSON', 'Configuration or data file'),
+        '.php': ('PHP Source', 'PHP script for server-side functionality'),
+        '.phtml': ('PHP Template', 'PHP template file'),
+        '.ctp': ('CakePHP Template', 'CakePHP view template')
     }
     
     return type_map.get(ext, ('Generic', 'Project file')) 

@@ -122,6 +122,31 @@ class RulesAnalyzer:
             except:
                 pass
 
+        # Check composer.json for PHP frameworks
+        composer_path = os.path.join(self.project_path, 'composer.json')
+        if os.path.exists(composer_path):
+            try:
+                with open(composer_path, 'r') as f:
+                    data = json.load(f)
+                    deps = {**data.get('require', {}), **data.get('require-dev', {})}
+                    
+                    if 'laravel/framework' in deps:
+                        return 'laravel'
+                    if 'symfony/symfony' in deps:
+                        return 'symfony'
+                    if 'cakephp/cakephp' in deps:
+                        return 'cakephp'
+                    if 'codeigniter/framework' in deps:
+                        return 'codeigniter'
+                    if 'yiisoft/yii2' in deps:
+                        return 'yii2'
+            except:
+                pass
+
+        # Check for WordPress
+        if os.path.exists(os.path.join(self.project_path, 'wp-config.php')):
+            return 'wordpress'
+
         return 'none'
 
     def _detect_project_type(self) -> str:

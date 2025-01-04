@@ -91,6 +91,21 @@ class RulesGenerator:
                 'use Flask blueprints for organization',
                 'implement proper error handling',
                 'use Flask-SQLAlchemy for database operations'
+            ],
+            'laravel': [
+                'follow Laravel best practices',
+                'use Laravel naming conventions',
+                'implement proper model relationships'
+            ],
+            'symfony': [
+                'follow Symfony best practices',
+                'use dependency injection',
+                'implement proper service architecture'
+            ],
+            'wordpress': [
+                'follow WordPress coding standards',
+                'use WordPress hooks properly',
+                'implement proper plugin/theme structure'
             ]
         }
         return framework_rules.get(framework.lower(), [])
@@ -112,6 +127,11 @@ class RulesGenerator:
                 'use strict type checking',
                 'leverage type inference',
                 'use interface over type when possible'
+            ],
+            'php': [
+                'follow PSR standards',
+                'use type declarations',
+                'implement proper error handling'
             ]
         }
         return language_rules.get(language.lower(), [])
