@@ -46,3 +46,4 @@ Focus.md
 test_output/
 config.json 
 .last_check_time
+.last_update_check
