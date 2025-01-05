@@ -8,21 +8,24 @@ from typing import Optional, Dict, Any
 import tempfile
 import zipfile
 
+def clear_console():
+    """Clear console screen for different OS."""
+    # For Windows
+    if os.name == 'nt':
+        os.system('cls')
+    # For Unix/Linux/MacOS
+    else:
+        os.system('clear')
+
 class AutoUpdater:
     def __init__(self, repo_url: str = "https://github.com/RenjiYuusei/CursorFocus"):
         self.repo_url = repo_url
         self.api_url = repo_url.replace("github.com", "api.github.com/repos")
-        self.last_check_file = os.path.join(os.path.dirname(__file__), '.last_update_check')
-        self.update_interval = 24 * 60 * 60  # 24 hours in seconds
 
     def check_for_updates(self) -> Optional[Dict[str, Any]]:
         """Check update from latest update"""
         try:
-            if not self._should_check_updates():
-                last_check = self._get_last_check_time()
-                print(f"Last check: {last_check}")
-                return None
-
+            # Check commit latest
             response = requests.get(f"{self.api_url}/commits/main")
             if response.status_code == 404:  
                 response = requests.get(f"{self.api_url}/commits/master")
@@ -105,50 +108,11 @@ class AutoUpdater:
 
             # Clean up
             shutil.rmtree(temp_dir)
+            
+            # Clear console after successful update
+            clear_console()
             return True
 
         except Exception as e:
             logging.error(f"Error updating: {e}")
-            return False
-
-    def _should_check_updates(self) -> bool:
-        """Check if enough time has passed since last update check."""
-        current_time = datetime.now()
-        
-        if not os.path.exists(self.last_check_file):
-            self._save_last_check_time(current_time)
-            return True
-        
-        try:
-            with open(self.last_check_file, 'r') as f:
-                last_check_str = f.read().strip()
-                last_check = datetime.strptime(last_check_str, "%Y-%m-%d %H:%M:%S")
-            
-            time_diff = current_time - last_check
-            should_check = time_diff.total_seconds() >= self.update_interval
-            
-            if should_check:
-                self._save_last_check_time(current_time)
-            
-            return should_check
-            
-        except Exception as e:
-            logging.error(f"Error reading last check time: {e}")
-            self._save_last_check_time(current_time)
-            return True
-
-    def _save_last_check_time(self, check_time: datetime):
-        """Save the last update check time in human readable format."""
-        try:
-            with open(self.last_check_file, 'w') as f:
-                f.write(check_time.strftime("%Y-%m-%d %H:%M:%S"))
-        except Exception as e:
-            logging.error(f"Error saving last check time: {e}")
-
-    def _get_last_check_time(self) -> str:
-        """Get the last update check time in human readable format."""
-        try:
-            with open(self.last_check_file, 'r') as f:
-                return f.read().strip()
-        except:
-            return "Never" 
+            return False 
