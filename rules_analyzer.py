@@ -79,7 +79,10 @@ class RulesAnalyzer:
             '.hpp': 'cpp',
             '.hxx': 'cpp',
             '.cs': 'csharp',
-            '.cshtml': 'csharp'
+            '.cshtml': 'csharp',
+            '.swift': 'swift',
+            '.kt': 'kotlin',
+            '.kts': 'kotlin'
         }
 
         # Find the most common language
@@ -185,6 +188,36 @@ class RulesAnalyzer:
                         return 'xamarin'
                     if 'microsoft.maui' in content:
                         return 'maui'
+            except:
+                pass
+
+        # Check for Swift frameworks
+        podfile_path = os.path.join(self.project_path, 'Podfile')
+        if os.path.exists(podfile_path):
+            try:
+                with open(podfile_path, 'r') as f:
+                    content = f.read().lower()
+                    if 'swiftui' in content:
+                        return 'swiftui'
+                    if 'combine' in content:
+                        return 'combine'
+                    if 'vapor' in content:
+                        return 'vapor'
+            except:
+                pass
+
+        # Check for Kotlin frameworks
+        build_gradle_path = os.path.join(self.project_path, 'build.gradle')
+        if os.path.exists(build_gradle_path):
+            try:
+                with open(build_gradle_path, 'r') as f:
+                    content = f.read().lower()
+                    if 'org.jetbrains.compose' in content:
+                        return 'jetpack compose'
+                    if 'org.springframework.boot' in content:
+                        return 'spring boot'
+                    if 'ktor' in content:
+                        return 'ktor'
             except:
                 pass
 

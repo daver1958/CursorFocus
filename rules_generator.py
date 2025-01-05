@@ -106,6 +106,21 @@ class RulesGenerator:
                 'follow WordPress coding standards',
                 'use WordPress hooks properly',
                 'implement proper plugin/theme structure'
+            ],
+            'swiftui': [
+                'use SwiftUI view modifiers',
+                'implement proper state management',
+                'follow SwiftUI lifecycle'
+            ],
+            'jetpack compose': [
+                'use Compose best practices',
+                'implement proper state hoisting',
+                'follow Compose lifecycle'
+            ],
+            'spring boot': [
+                'follow Spring Boot conventions',
+                'use dependency injection',
+                'implement proper service architecture'
             ]
         }
         return framework_rules.get(framework.lower(), [])
@@ -153,6 +168,20 @@ class RulesGenerator:
                 'implement error handling with return codes',
                 'use header guards',
                 'avoid global variables'
+            ],
+            'swift': [
+                'follow Swift API Design Guidelines',
+                'use proper access control',
+                'leverage Swift type system',
+                'use protocol-oriented programming',
+                'implement proper error handling'
+            ],
+            'kotlin': [
+                'follow Kotlin coding conventions',
+                'use null safety features',
+                'leverage extension functions',
+                'use coroutines for async operations',
+                'implement proper error handling'
             ]
         }
         return language_rules.get(language.lower(), [])

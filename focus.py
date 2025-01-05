@@ -182,8 +182,10 @@ def main():
     update_info = updater.check_for_updates()
     
     if update_info:
-        print(f"\n📦 Update available: {update_info['tag_name']}")
-        print(f"Changes: {update_info['body']}")
+        print(f"\n📦 New updates available")
+        print(f"Commit: {update_info['message']}")
+        print(f"Author: {update_info['author']}")
+        print(f"Date: {update_info['date']}")
         
         if input("\nDo you want to update? (y/n): ").lower() == 'y':
             print("\n⏳ Downloading and installing update...")
@@ -195,7 +197,6 @@ def main():
     else:
         print("✅ You are using the latest version.")
 
-    # Tiếp tục với code hiện tại...
     config = load_config()
     if not config:
         print("No config.json found, using default configuration")

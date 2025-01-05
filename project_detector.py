@@ -147,7 +147,16 @@ def get_file_type_info(filename):
         '.c': ('C Source', 'C implementation file'),
         '.h': ('C/C++ Header', 'Header file'),
         '.cs': ('C# Source', 'C# implementation file'),
-        '.cshtml': ('Razor View', 'ASP.NET Core view template')
+        '.cshtml': ('Razor View', 'ASP.NET Core view template'),
+        '.swift': ('Swift Source', 'Swift implementation file'),
+        '.kt': ('Kotlin Source', 'Kotlin implementation file'),
+        '.kts': ('Kotlin Script', 'Kotlin build script file'),
+        '.xcodeproj': ('Xcode Project', 'iOS/macOS project configuration'),
+        '.xcworkspace': ('Xcode Workspace', 'iOS/macOS workspace configuration'),
+        '.gradle': ('Gradle Build', 'Android/Kotlin build configuration'),
+        '.podspec': ('CocoaPods Spec', 'iOS dependency specification'),
+        '.storyboard': ('iOS Storyboard', 'iOS UI layout file'),
+        '.xib': ('iOS XIB', 'iOS UI component file')
     }
     
     return type_map.get(ext, ('Generic', 'Project file')) 

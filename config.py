@@ -63,7 +63,10 @@ def get_default_config():
             ".toml": 100,
             ".md": 500,
             ".rst": 500,
-            "default": 300
+            "default": 300,
+            ".swift": 400,
+            ".kt": 300,
+            ".kts": 200
         }
     }
 
@@ -82,7 +85,8 @@ NON_CODE_EXTENSIONS = {
 # Extensions that should be analyzed for code
 CODE_EXTENSIONS = {
     '.js', '.jsx', '.ts', '.tsx', '.py', '.java', '.cpp', '.c', '.h', 
-    '.hpp', '.cs', '.go', '.rb', '.php', '.phtml', '.ctp'
+    '.hpp', '.cs', '.go', '.rb', '.php', '.phtml', '.ctp',
+    '.swift', '.kt', '.kts'
 }
 
 # Regex patterns for function detection
