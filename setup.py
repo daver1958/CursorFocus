@@ -67,6 +67,9 @@ def setup_cursorfocus():
                        help='Scan directory for projects. If no path provided, scans current directory')
     parser.add_argument('--scan-depth', type=int, default=3, help='Maximum depth for project scanning')
     parser.add_argument('--auto-add', '-a', action='store_true', help='Automatically add all found projects')
+    parser.add_argument('--sort', choices=['name', 'type', 'language'], 
+                       help='Sort projects by field')
+    parser.add_argument('--filter', help='Filter projects by type/language/framework')
     
     args = parser.parse_args()
     
@@ -101,6 +104,18 @@ def setup_cursorfocus():
         print(f"\n🔍 Scanning for projects in: {scan_path}")
         found_projects = scan_for_projects(scan_path, args.scan_depth)
         
+        # Filter projects if a filter is provided
+        if args.filter:
+            filter_term = args.filter.lower()
+            found_projects = [p for p in found_projects if 
+                             filter_term in p['type'].lower() or
+                             filter_term in p.get('language', '').lower() or 
+                             filter_term in p.get('framework', '').lower()]
+        
+        # Sort projects if a sort option is provided
+        if args.sort:
+            found_projects.sort(key=lambda x: str(x.get(args.sort, '')).lower())
+        
         if not found_projects:
             print("No projects found.")
             return
@@ -109,6 +124,12 @@ def setup_cursorfocus():
         for i, project in enumerate(found_projects, 1):
             print(f"\n  {i}. {project['name']} ({project['type']})")
             print(f"     Path: {project['path']}")
+            if 'description' in project:
+                print(f"     Description: {project['description']}")
+            if 'language' in project:
+                print(f"     Language: {project['language']}")
+            if 'framework' in project:
+                print(f"     Framework: {project['framework']}")
         
         if args.auto_add:
             # Automatically add all found projects

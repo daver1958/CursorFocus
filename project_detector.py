@@ -1,73 +1,210 @@
 import os
 import json
+import re
 from config import load_config
+import time
 
 # Load project types from config at module level
 _config = load_config()
-PROJECT_TYPES = _config.get('project_types', {})
+PROJECT_TYPES = {
+    'python': {
+        'description': 'Python Project',
+        'indicators': ['setup.py', 'requirements.txt', 'Pipfile', 'pyproject.toml'],
+        'required_files': []
+    },
+    'node_js': {
+        'description': 'Node.js Project', 
+        'indicators': ['package.json', 'package-lock.json', 'yarn.lock'],
+        'required_files': []
+    },
+    'php': {
+        'description': 'PHP Project',
+        'indicators': ['composer.json', 'composer.lock', 'artisan'],
+        'required_files': []
+    },
+    'java': {
+        'description': 'Java Project',
+        'indicators': ['pom.xml', 'build.gradle', 'gradlew'],
+        'required_files': []
+    },
+    'dotnet': {
+        'description': '.NET Project',
+        'indicators': ['.sln', '.csproj', '.vbproj', '.fsproj'],
+        'required_files': []
+    },
+    'go': {
+        'description': 'Go Project',
+        'indicators': ['go.mod', 'go.sum'],
+        'required_files': []
+    },
+    'rust': {
+        'description': 'Rust Project',
+        'indicators': ['Cargo.toml', 'Cargo.lock'],
+        'required_files': []
+    },
+    'flutter': {
+        'description': 'Flutter Project',
+        'indicators': ['pubspec.yaml', 'pubspec.lock'],
+        'required_files': []
+    },
+    'android': {
+        'description': 'Android Project',
+        'indicators': ['build.gradle', 'settings.gradle', 'gradlew'],
+        'required_files': []
+    },
+    'ios': {
+        'description': 'iOS Project',
+        'indicators': ['*.xcodeproj', '*.xcworkspace', 'Podfile'],
+        'required_files': []
+    },
+    'web': {
+        'description': 'Web Project',
+        'indicators': ['index.html', 'webpack.config.js', 'vite.config.js'],
+        'required_files': []
+    },
+    'docker': {
+        'description': 'Docker Project',
+        'indicators': ['Dockerfile', 'docker-compose.yml'],
+        'required_files': []
+    },
+    'git': {
+        'description': 'Git Repository',
+        'indicators': ['.git'],
+        'required_files': []
+    }
+}
+
+# Thêm cache cho kết quả scan
+_scan_cache = {}
 
 def detect_project_type(project_path):
     """Detect project type based on file presence using configurable rules."""
+    if not os.path.exists(project_path):
+        return 'generic'
+        
+    try:
+        files = os.listdir(project_path)
+    except (PermissionError, OSError):
+        return 'generic'
+        
+    # Check each project type
     for project_type, rules in PROJECT_TYPES.items():
         # Check for indicator files
-        if any(os.path.exists(os.path.join(project_path, f)) for f in rules.get('indicators', [])):
-            return project_type
-            
-        # Check for required files
-        if rules.get('required_files') and all(os.path.exists(os.path.join(project_path, f)) for f in rules['required_files']):
-            return project_type
-            
+        for indicator in rules.get('indicators', []):
+            # Handle wildcard patterns
+            if '*' in indicator:
+                pattern = indicator.replace('.', '[.]').replace('*', '.*')
+                if any(re.match(pattern, f) for f in files):
+                    return project_type
+            # Direct file match
+            elif indicator in files:
+                return project_type
+                
+        # Check for required files if specified
+        if rules.get('required_files'):
+            if all(f in files for f in rules['required_files']):
+                return project_type
+                
+    # Fallback checks for common development files
+    common_dev_files = [
+        'README.md',
+        '.gitignore',
+        'LICENSE',
+        'CHANGELOG.md',
+        'docs/',
+        'src/',
+        'test/',
+        'tests/'
+    ]
+    
+    if any(f in files for f in common_dev_files):
+        return 'generic_dev'
+        
     return 'generic'
 
-def scan_for_projects(root_path, max_depth=3, ignored_dirs=None):
-    """Scan directory recursively for projects."""
-    if ignored_dirs is None:
-        ignored_dirs = _config.get('ignored_directories', [])
+def detect_language_and_framework(project_path):
+    """Detect primary language and framework of a project."""
+    try:
+        files = os.listdir(project_path)
+    except:
+        return 'unknown', 'none'
+        
+    # Language detection based on file extensions and key files
+    language_indicators = {
+        'python': ['.py', 'requirements.txt', 'setup.py', 'Pipfile'],
+        'javascript': ['.js', '.jsx', 'package.json'],
+        'typescript': ['.ts', '.tsx', 'tsconfig.json'],
+        'java': ['.java', 'pom.xml', 'build.gradle'],
+        'php': ['.php', 'composer.json'],
+        'ruby': ['.rb', 'Gemfile'],
+        'go': ['.go', 'go.mod'],
+        'rust': ['.rs', 'Cargo.toml'],
+        'c++': ['.cpp', '.hpp', '.cc', '.cxx'],
+        'c#': ['.cs', '.csproj', '.sln']
+    }
     
-    projects = []
-    root_path = os.path.abspath(root_path or '.')
+    # Framework detection based on specific files/directories
+    framework_indicators = {
+        'django': ['manage.py', 'django.contrib'],
+        'flask': ['flask', 'Flask=='],
+        'fastapi': ['fastapi'],
+        'react': ['react', 'React.'],
+        'vue': ['vue.config.js', 'Vue.'],
+        'angular': ['angular.json', '@angular'],
+        'laravel': ['artisan', 'Laravel'],
+        'spring': ['spring-boot', 'SpringBoot'],
+        'express': ['express'],
+        'dotnet': ['Microsoft.NET.Sdk']
+    }
     
-    # Kiểm tra thư mục gốc trước
-    project_type = detect_project_type(root_path)
-    if project_type != 'generic':
-        projects.append({
-            'path': root_path,
-            'type': project_type,
-            'name': os.path.basename(root_path)
-        })
+    # Detect language
+    detected_language = 'unknown'
+    max_matches = 0
     
-    def _scan_directory(current_path, current_depth):
-        if current_depth > max_depth:
-            return
+    for lang, indicators in language_indicators.items():
+        matches = 0
+        for f in files:
+            if any(f.endswith(ind) if ind.startswith('.') else ind in f for ind in indicators):
+                matches += 1
+        if matches > max_matches:
+            max_matches = matches
+            detected_language = lang
             
-        try:
-            # Skip ignored directories
-            if any(ignored in current_path.split(os.path.sep) for ignored in ignored_dirs):
-                return
-                
-            # Scan subdirectories
-            for item in os.listdir(current_path):
-                item_path = os.path.join(current_path, item)
-                if os.path.isdir(item_path):
-                    # Kiểm tra từng thư mục con
-                    project_type = detect_project_type(item_path)
-                    if project_type != 'generic':
-                        projects.append({
-                            'path': item_path,
-                            'type': project_type,
-                            'name': item
-                        })
-                    else:
-                        # Nếu không phải project thì quét tiếp
-                        _scan_directory(item_path, current_depth + 1)
+    # Detect framework by checking file contents
+    detected_framework = 'none'
+    for framework, indicators in framework_indicators.items():
+        for f in files:
+            if f in ['requirements.txt', 'package.json', 'composer.json']:
+                try:
+                    with open(os.path.join(project_path, f), 'r') as file:
+                        content = file.read().lower()
+                        if any(ind.lower() in content for ind in indicators):
+                            detected_framework = framework
+                            break
+                except:
+                    continue
                     
-        except (PermissionError, OSError):
-            # Skip directories we can't access
-            pass
+    return detected_language, detected_framework
+
+def scan_for_projects(root_path, max_depth=3, ignored_dirs=None, use_cache=True):
+    """Scan directory recursively for projects with caching."""
+    cache_key = f"{root_path}:{max_depth}"
     
-    # Bắt đầu quét từ thư mục gốc
-    _scan_directory(root_path, 0)
-    return projects
+    # Kiểm tra cache
+    if use_cache and cache_key in _scan_cache:
+        cache_time, cached_results = _scan_cache[cache_key]
+        # Cache có hiệu lực trong 5 phút
+        if time.time() - cache_time < 300:
+            return cached_results
+    
+    # Thực hiện scan như bình thường
+    results = _do_scan(root_path, max_depth, ignored_dirs)
+    
+    # Lưu vào cache
+    if use_cache:
+        _scan_cache[cache_key] = (time.time(), results)
+    
+    return results
 
 def get_project_description(project_path):
     """Get project description and key features using standardized approach."""
@@ -160,3 +297,65 @@ def get_file_type_info(filename):
     }
     
     return type_map.get(ext, ('Generic', 'Project file')) 
+
+def _do_scan(root_path, max_depth=3, ignored_dirs=None):
+    """Perform a scan of the directory to find projects."""
+    if ignored_dirs is None:
+        ignored_dirs = _config.get('ignored_directories', [])
+    
+    projects = []
+    root_path = os.path.abspath(root_path or '.')
+    
+    # Check the root directory first
+    project_type = detect_project_type(root_path)
+    if project_type != 'generic':
+        # Analyze project information
+        project_info = get_project_description(root_path)
+        language, framework = detect_language_and_framework(root_path)
+        projects.append({
+            'path': root_path,
+            'type': project_type,
+            'name': project_info.get('name', os.path.basename(root_path)),
+            'description': project_info.get('description', 'No description available'),
+            'language': language,
+            'framework': framework
+        })
+    
+    def _scan_directory(current_path, current_depth):
+        if current_depth > max_depth:
+            return
+            
+        try:
+            # Skip ignored directories
+            if any(ignored in current_path.split(os.path.sep) for ignored in ignored_dirs):
+                return
+                
+            # Scan subdirectories
+            for item in os.listdir(current_path):
+                item_path = os.path.join(current_path, item)
+                if os.path.isdir(item_path):
+                    # Check each subdirectory
+                    project_type = detect_project_type(item_path)
+                    if project_type != 'generic':
+                        # Analyze project information
+                        project_info = get_project_description(item_path)
+                        language, framework = detect_language_and_framework(item_path)
+                        projects.append({
+                            'path': item_path,
+                            'type': project_type,
+                            'name': project_info.get('name', item),
+                            'description': project_info.get('description', 'No description available'),
+                            'language': language,
+                            'framework': framework
+                        })
+                    else:
+                        # If not a project, scan further
+                        _scan_directory(item_path, current_depth + 1)
+                    
+        except (PermissionError, OSError):
+            # Skip directories we can't access
+            pass
+            
+    # Start scanning from the root directory
+    _scan_directory(root_path, 0)
+    return projects 
