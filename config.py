@@ -98,15 +98,15 @@ FUNCTION_PATTERNS = {
     'object_property': r'([a-zA-Z_]\w*)\s*:\s*(?:\([^)]*\)|[^=])\s*=>',
     'php_function': r'(?:public\s+|private\s+|protected\s+)?function\s+([a-zA-Z_]\w*)\s*\(',
     'php_class_method': r'(?:public\s+|private\s+|protected\s+)function\s+([a-zA-Z_]\w*)\s*\(',
-    'cpp_function': r'(?:virtual\s+)?(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:::\w+)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:final\s*)?(?:=\s*0\s*)?(?:=\s*default\s*)?(?:=\s*delete\s*)?(?:{|;)',
+    'cpp_function': r'(?:virtual\s+)?(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:::\w+)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*const)?(?:\s*noexcept)?(?:\s*override)?(?:\s*final)?(?:\s*=\s*0)?(?:\s*=\s*default)?(?:\s*=\s*delete)?(?:{|;)',
     'csharp_method': r'(?:public|private|protected|internal|static|virtual|override|abstract|sealed|async)\s+(?:\w+(?:<[^>]+>)?)\s+([a-zA-Z_]\w*)\s*\([^)]*\)',
-    'c_function': r'(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:\s*\*)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:{|;)',
-    'kotlin_function': r'(?:fun\s+)?([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)\s*(?::\s*[^{]+)?\s*{',
+    'c_function': r'(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:\s*\*)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*{|;)',
+    'kotlin_function': r'(?:fun\s+)?([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)(?:\s*:\s*[^{]+)?\s*{',
     'kotlin_property': r'(?:val|var)\s+([a-zA-Z_]\w*)\s*(?::\s*[^=]+)?\s*=\s*{',
-    'swift_function': r'(?:func\s+)([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)\s*(?:->\s*[^{]+)?\s*{',
+    'swift_function': r'(?:func\s+)([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)(?:\s*->\s*[^{]+)?\s*{',
     'swift_property': r'(?:var|let)\s+([a-zA-Z_]\w*)\s*:\s*[^{]+\s*{\s*(?:get|set|willSet|didSet)',
-    'go_function': r'func\s+([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:\([^)]*\))?\s*{',
-    'go_method': r'func\s*\([^)]*\)\s*([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:\([^)]*\))?\s*{'
+    'go_function': r'func\s+([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*\([^)]*\))?\s*{',
+    'go_method': r'func\s*\([^)]*\)\s*([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*\([^)]*\))?\s*{'
 }
 
 # Keywords that should not be treated as function names

@@ -196,9 +196,13 @@ def structure_to_tree(structure, prefix=''):
 def analyze_file_content(file_path):
     """Analyze file content for functions and metrics."""
     try:
-        # Skip non-code files
+        # Skip binary and non-code files
         ext = os.path.splitext(file_path)[1].lower()
         if ext in NON_CODE_EXTENSIONS or ext not in CODE_EXTENSIONS:
+            return [], 0
+            
+        # Skip binary files
+        if is_binary_file(file_path):
             return [], 0
 
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -209,7 +213,7 @@ def analyze_file_content(file_path):
             try:
                 matches = re.finditer(pattern, content)
                 for match in matches:
-                    func_name = match.group(1)
+                    func_name = next(filter(None, match.groups()), None)
                     if func_name and func_name not in IGNORED_KEYWORDS:
                         functions.append((func_name, "Function detected"))
             except re.error as e:
