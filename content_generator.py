@@ -2,7 +2,16 @@ import os
 from datetime import datetime
 from analyzers import analyze_file_content, should_ignore_file, is_binary_file
 from project_detector import detect_project_type, get_project_description, get_file_type_info
-from config import get_file_length_limit, load_config
+from config import (
+    get_file_length_limit, 
+    load_config, 
+    FUNCTION_PATTERNS,
+    IGNORED_KEYWORDS,
+    CODE_EXTENSIONS,
+    NON_CODE_EXTENSIONS
+)
+import re
+import logging
 
 class ProjectMetrics:
     def __init__(self):
@@ -183,3 +192,38 @@ def structure_to_tree(structure, prefix=''):
             lines.extend(structure_to_tree(substructure, prefix + extension))
     
     return lines 
+
+def analyze_file_content(file_path):
+    """Analyze file content for functions and metrics."""
+    try:
+        # Skip non-code files
+        ext = os.path.splitext(file_path)[1].lower()
+        if ext in NON_CODE_EXTENSIONS or ext not in CODE_EXTENSIONS:
+            return [], 0
+
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            
+        functions = []
+        for pattern_name, pattern in FUNCTION_PATTERNS.items():
+            try:
+                matches = re.finditer(pattern, content)
+                for match in matches:
+                    func_name = match.group(1)
+                    if func_name and func_name not in IGNORED_KEYWORDS:
+                        functions.append((func_name, "Function detected"))
+            except re.error as e:
+                logging.debug(f"Invalid regex pattern {pattern_name} for {file_path}: {e}")
+                continue
+            except Exception as e:
+                logging.debug(f"Error analyzing pattern {pattern_name} for {file_path}: {e}")
+                continue
+                
+        return functions, len(content.splitlines())
+        
+    except UnicodeDecodeError:
+        logging.debug(f"Unable to read {file_path} as text file")
+        return [], 0
+    except Exception as e:
+        logging.debug(f"Error analyzing file {file_path}: {e}")
+        return [], 0 

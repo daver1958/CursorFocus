@@ -45,3 +45,4 @@ Focus.md
 *.log
 test_output/
 config.json 
+.last_check_time

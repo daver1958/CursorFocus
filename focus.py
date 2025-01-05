@@ -5,6 +5,8 @@ from config import load_config
 from content_generator import generate_focus_content
 from rules_analyzer import RulesAnalyzer
 from rules_generator import RulesGenerator
+import logging
+from auto_updater import AutoUpdater
 
 def get_default_config():
     """Get default configuration with parent directory as project path."""
@@ -168,6 +170,32 @@ def monitor_project(project_config, global_config):
 
 def main():
     """Main function to monitor multiple projects."""
+    # Setup logging
+    logging.basicConfig(
+        level=logging.WARNING,
+        format='%(levelname)s: %(message)s'
+    )
+
+    # Check updates before running the program
+    print("\n🔄 Checking for updates...")
+    updater = AutoUpdater()
+    update_info = updater.check_for_updates()
+    
+    if update_info:
+        print(f"\n📦 Update available: {update_info['tag_name']}")
+        print(f"Changes: {update_info['body']}")
+        
+        if input("\nDo you want to update? (y/n): ").lower() == 'y':
+            print("\n⏳ Downloading and installing update...")
+            if updater.update(update_info):
+                print("✅ Update successful! Please restart the application.")
+                return
+            else:
+                print("❌ Update failed. Continuing with current version.")
+    else:
+        print("✅ You are using the latest version.")
+
+    # Tiếp tục với code hiện tại...
     config = load_config()
     if not config:
         print("No config.json found, using default configuration")

@@ -87,16 +87,22 @@ CODE_EXTENSIONS = {
 
 # Regex patterns for function detection
 FUNCTION_PATTERNS = {
-    'standard': r'(?:^|\s+)(?:function\s+(\w+)|(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?function)',
-    'arrow': r'(?:^|\s+)(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?(?:\([^)]*\)|[^=])\s*=>',
-    'method': r'\b(\w+)\s*:\s*(?:async\s*)?function',
-    'class_method': r'(?:^|\s+)(?:async\s+)?(\w+)\s*\([^)]*\)\s*{',
-    'object_property': r'(\w+)\s*:\s*(?:\([^)]*\)|[^=])\s*=>',
-    'php_function': r'(?:public\s+|private\s+|protected\s+)?function\s+(\w+)\s*\(',
-    'php_class_method': r'(?:public\s+|private\s+|protected\s+)function\s+(\w+)\s*\(',
-    'cpp_function': r'(?:virtual\s+)?(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:::\w+)*\s+)?(\w+)\s*\([^)]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:final\s*)?(?:=\s*0\s*)?(?:=\s*default\s*)?(?:=\s*delete\s*)?(?:{|;)',
-    'csharp_method': r'(?:public|private|protected|internal|static|virtual|override|abstract|sealed|async)\s+(?:\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)',
-    'c_function': r'(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:\s*\*)*\s+)?(\w+)\s*\([^)]*\)\s*(?:{|;)'
+    'standard': r'(?:^|\s+)(?:function\s+([a-zA-Z_]\w*)|(?:const|let|var)\s+([a-zA-Z_]\w*)\s*=\s*(?:async\s*)?function)',
+    'arrow': r'(?:^|\s+)(?:const|let|var)\s+([a-zA-Z_]\w*)\s*=\s*(?:async\s*)?(?:\([^)]*\)|[^=])\s*=>',
+    'method': r'\b([a-zA-Z_]\w*)\s*:\s*(?:async\s*)?function',
+    'class_method': r'(?:^|\s+)(?:async\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)\s*{',
+    'object_property': r'([a-zA-Z_]\w*)\s*:\s*(?:\([^)]*\)|[^=])\s*=>',
+    'php_function': r'(?:public\s+|private\s+|protected\s+)?function\s+([a-zA-Z_]\w*)\s*\(',
+    'php_class_method': r'(?:public\s+|private\s+|protected\s+)function\s+([a-zA-Z_]\w*)\s*\(',
+    'cpp_function': r'(?:virtual\s+)?(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:::\w+)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?(?:final\s*)?(?:=\s*0\s*)?(?:=\s*default\s*)?(?:=\s*delete\s*)?(?:{|;)',
+    'csharp_method': r'(?:public|private|protected|internal|static|virtual|override|abstract|sealed|async)\s+(?:\w+(?:<[^>]+>)?)\s+([a-zA-Z_]\w*)\s*\([^)]*\)',
+    'c_function': r'(?:static\s+)?(?:inline\s+)?(?:const\s+)?(?:\w+(?:\s*\*)*\s+)?([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:{|;)',
+    'kotlin_function': r'(?:fun\s+)?([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)\s*(?::\s*[^{]+)?\s*{',
+    'kotlin_property': r'(?:val|var)\s+([a-zA-Z_]\w*)\s*(?::\s*[^=]+)?\s*=\s*{',
+    'swift_function': r'(?:func\s+)([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)\s*(?:->\s*[^{]+)?\s*{',
+    'swift_property': r'(?:var|let)\s+([a-zA-Z_]\w*)\s*:\s*[^{]+\s*{\s*(?:get|set|willSet|didSet)',
+    'go_function': r'func\s+([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:\([^)]*\))?\s*{',
+    'go_method': r'func\s*\([^)]*\)\s*([a-zA-Z_]\w*)\s*\([^)]*\)\s*(?:\([^)]*\))?\s*{'
 }
 
 # Keywords that should not be treated as function names

@@ -4,6 +4,11 @@ A lightweight tool that maintains a focused view of your project structure and e
 
 Check out our [SHOWCASE.md](SHOWCASE.md) for detailed examples and real-world use cases!
 
+
+## Discord
+
+Join our Discord server to discuss features, ask questions: [Discord](https://discord.gg/7MjqwynP)
+
 ## Features
 
 - 🔄 Real-time project structure tracking
