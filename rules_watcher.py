@@ -1,6 +1,6 @@
 import os
 import time
-from typing import Dict
+from typing import Dict, Any
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from rules_generator import RulesGenerator
@@ -61,7 +61,7 @@ class RulesWatcher(FileSystemEventHandler):
 
 class ProjectWatcherManager:
     def __init__(self):
-        self.observers: Dict[str, Observer] = {}
+        self.observers: Dict[str, Any] = {}
         self.watchers: Dict[str, RulesWatcher] = {}
 
     def add_project(self, project_path: str, project_id: str = None) -> str:

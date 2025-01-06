@@ -46,19 +46,24 @@ class RulesGenerator:
         rules['last_updated'] = self._get_timestamp()
         
         # Update project info
-        rules['project'].update(project_info)
+        rules['project'].update({
+            'type': project_info.get('type', 'generic'),
+            'language': project_info.get('language', 'unknown'),
+            'framework': project_info.get('framework', 'none'),
+            'description': project_info.get('description', 'Generic Project')
+        })
         
         # Add framework-specific rules
-        if project_info['framework'] != 'none':
+        if project_info.get('framework') != 'none':
             framework_rules = self._get_framework_rules(project_info['framework'])
             rules['ai_behavior']['code_generation']['style']['prefer'].extend(framework_rules)
         
         # Add language-specific rules
-        language_rules = self._get_language_rules(project_info['language'])
+        language_rules = self._get_language_rules(project_info.get('language', 'unknown'))
         rules['ai_behavior']['code_generation']['style']['prefer'].extend(language_rules)
         
         # Add project-type specific rules
-        self._add_project_type_rules(rules, project_info['type'])
+        self._add_project_type_rules(rules, project_info.get('type', 'generic'))
         
         # Update testing frameworks
         rules['ai_behavior']['testing']['frameworks'] = self._detect_testing_frameworks()

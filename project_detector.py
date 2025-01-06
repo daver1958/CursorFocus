@@ -78,49 +78,77 @@ PROJECT_TYPES = {
 _scan_cache = {}
 
 def detect_project_type(project_path):
-    """Detect project type based on file presence using configurable rules."""
+    """Detect project type based on file presence using configurable rules.
+    
+    Returns:
+        dict: A dictionary containing project information with keys:
+            - type: The detected project type
+            - language: The primary programming language
+            - framework: The detected framework
+    """
     if not os.path.exists(project_path):
-        return 'generic'
+        return {
+            'type': 'generic',
+            'language': 'unknown',
+            'framework': 'none'
+        }
         
     try:
         files = os.listdir(project_path)
     except (PermissionError, OSError):
-        return 'generic'
+        return {
+            'type': 'generic',
+            'language': 'unknown',
+            'framework': 'none'
+        }
         
+    project_type = 'generic'
     # Check each project type
-    for project_type, rules in PROJECT_TYPES.items():
+    for type_name, rules in PROJECT_TYPES.items():
         # Check for indicator files
         for indicator in rules.get('indicators', []):
             # Handle wildcard patterns
             if '*' in indicator:
                 pattern = indicator.replace('.', '[.]').replace('*', '.*')
                 if any(re.match(pattern, f) for f in files):
-                    return project_type
+                    project_type = type_name
+                    break
             # Direct file match
             elif indicator in files:
-                return project_type
+                project_type = type_name
+                break
                 
         # Check for required files if specified
         if rules.get('required_files'):
             if all(f in files for f in rules['required_files']):
-                return project_type
+                project_type = type_name
+                break
                 
-    # Fallback checks for common development files
-    common_dev_files = [
-        'README.md',
-        '.gitignore',
-        'LICENSE',
-        'CHANGELOG.md',
-        'docs/',
-        'src/',
-        'test/',
-        'tests/'
-    ]
+    # Detect language and framework
+    language, framework = detect_language_and_framework(project_path)
     
-    if any(f in files for f in common_dev_files):
-        return 'generic_dev'
+    # Fallback checks for common development files
+    if project_type == 'generic':
+        common_dev_files = [
+            'README.md',
+            '.gitignore',
+            'LICENSE',
+            'CHANGELOG.md',
+            'docs/',
+            'src/',
+            'test/',
+            'tests/'
+        ]
         
-    return 'generic'
+        if any(f in files for f in common_dev_files):
+            project_type = 'generic_dev'
+    
+    return {
+        'type': project_type,
+        'language': language,
+        'framework': framework,
+        'description': PROJECT_TYPES.get(project_type, {'description': 'Generic Project'})['description']
+    }
 
 def detect_language_and_framework(project_path):
     """Detect primary language and framework of a project."""
@@ -209,12 +237,16 @@ def scan_for_projects(root_path, max_depth=3, ignored_dirs=None, use_cache=True)
 def get_project_description(project_path):
     """Get project description and key features using standardized approach."""
     try:
-        project_type = detect_project_type(project_path)
-        project_info = {
+        project_info = detect_project_type(project_path)
+        project_type = project_info['type']
+        
+        result = {
             "name": os.path.basename(project_path),
             "description": "Project directory structure and information",
             "key_features": [
                 f"Type: {PROJECT_TYPES.get(project_type, {'description': 'Generic Project'})['description']}",
+                f"Language: {project_info['language']}",
+                f"Framework: {project_info['framework']}",
                 "File and directory tracking",
                 "Automatic updates"
             ]
@@ -225,7 +257,7 @@ def get_project_description(project_path):
             if os.path.exists(manifest_path):
                 with open(manifest_path, 'r') as f:
                     manifest_data = json.load(f)
-                    project_info.update({
+                    result.update({
                         "name": manifest_data.get('name', 'Chrome Extension'),
                         "description": manifest_data.get('description', 'No description available'),
                         "key_features": [
@@ -240,7 +272,7 @@ def get_project_description(project_path):
             if os.path.exists(package_path):
                 with open(package_path, 'r') as f:
                     package_data = json.load(f)
-                    project_info.update({
+                    result.update({
                         "name": package_data.get('name', 'Node.js Project'),
                         "description": package_data.get('description', 'No description available'),
                         "key_features": [
@@ -250,7 +282,7 @@ def get_project_description(project_path):
                         ]
                     })
         
-        return project_info
+        return result
         
     except Exception as e:
         print(f"Error getting project description: {e}")
