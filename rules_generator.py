@@ -70,7 +70,7 @@ class RulesGenerator:
         project_config = self._get_project_config()
         if project_config:
             rules['project'].update(project_config)
-            
+        
         return rules
 
     def _get_framework_rules(self, framework: str) -> List[str]:

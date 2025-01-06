@@ -146,51 +146,28 @@ CursorFocus automatically generates and maintains three key files:
    python3 focus.py
    ```
 
-## Automatic Startup (macOS)
+## Setup
 
-To have CursorFocus start automatically when you log in:
+1. Clone repository it
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Run setup to configure the projects you want to monitor:
+```bash
+python setup.py --scan
+```
 
-1. Create a LaunchAgent configuration:
-   ```bash
-   mkdir -p ~/Library/LaunchAgents
-   ```
+## Usage
 
-2. Create the file `~/Library/LaunchAgents/com.cursorfocus.plist` with:
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-   <plist version="1.0">
-   <dict>
-       <key>Label</key>
-       <string>com.cursorfocus</string>
-       <key>ProgramArguments</key>
-       <array>
-           <string>/usr/local/bin/python3</string>
-           <string>/path/to/your/CursorFocus/focus.py</string>
-       </array>
-       <key>RunAtLoad</key>
-       <true/>
-       <key>StandardOutPath</key>
-       <string>/tmp/cursorfocus.log</string>
-       <key>StandardErrorPath</key>
-       <string>/tmp/cursorfocus.err</string>
-       <key>KeepAlive</key>
-       <true/>
-   </dict>
-   </plist>
-   ```
-   
-   Replace `/path/to/your/CursorFocus/focus.py` with the actual path to your focus.py file.
+1. Run the program:
+```bash
+python focus.py
+```
 
-3. Load the LaunchAgent:
-   ```bash
-   launchctl load ~/Library/LaunchAgents/com.cursorfocus.plist
-   ```
-
-4. To stop the automatic startup:
-   ```bash
-   launchctl unload ~/Library/LaunchAgents/com.cursorfocus.plist
-   ```
+2. To run automatically when the computer starts:
+- Windows: Create a shortcut to `focus.py` and set it to run at startup
+- Linux: Add the command to run to `.bashrc` or create a systemd service
 
 ## Output
 
