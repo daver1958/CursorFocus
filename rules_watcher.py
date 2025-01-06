@@ -1,13 +1,15 @@
 import os
 import time
+from typing import Dict
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from rules_generator import RulesGenerator
 from project_detector import detect_project_type
 
 class RulesWatcher(FileSystemEventHandler):
-    def __init__(self, project_path: str):
+    def __init__(self, project_path: str, project_id: str):
         self.project_path = project_path
+        self.project_id = project_id
         self.rules_generator = RulesGenerator(project_path)
         self.last_update = 0
         self.update_delay = 5  # Seconds to wait before updating to avoid multiple updates
@@ -53,20 +55,86 @@ class RulesWatcher(FileSystemEventHandler):
             
             # Generate new rules
             self.rules_generator.generate_rules_file(project_info)
-            print(f"Updated .cursorrules at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"Updated .cursorrules for project {self.project_id} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         except Exception as e:
-            print(f"Error updating .cursorrules: {e}")
+            print(f"Error updating .cursorrules for project {self.project_id}: {e}")
 
-def start_watching(project_path: str):
-    """Start watching the project directory for changes."""
-    event_handler = RulesWatcher(project_path)
-    observer = Observer()
-    observer.schedule(event_handler, project_path, recursive=True)
-    observer.start()
+class ProjectWatcherManager:
+    def __init__(self):
+        self.observers: Dict[str, Observer] = {}
+        self.watchers: Dict[str, RulesWatcher] = {}
+
+    def add_project(self, project_path: str, project_id: str = None) -> str:
+        """Add a new project to watch.
+        
+        Args:
+            project_path: Path to the project directory
+            project_id: Optional unique identifier for the project. If not provided,
+                       the absolute path will be used as the ID.
+                       
+        Returns:
+            The project ID used for the watcher
+        """
+        if not os.path.exists(project_path):
+            raise ValueError(f"Project path does not exist: {project_path}")
+            
+        project_id = project_id or os.path.abspath(project_path)
+        
+        if project_id in self.observers:
+            print(f"Project {project_id} is already being watched")
+            return project_id
+            
+        event_handler = RulesWatcher(project_path, project_id)
+        observer = Observer()
+        observer.schedule(event_handler, project_path, recursive=True)
+        observer.start()
+        
+        self.observers[project_id] = observer
+        self.watchers[project_id] = event_handler
+        
+        print(f"Started watching project {project_id}")
+        return project_id
+
+    def remove_project(self, project_id: str):
+        """Stop watching a project."""
+        if project_id not in self.observers:
+            print(f"Project {project_id} is not being watched")
+            return
+            
+        observer = self.observers[project_id]
+        observer.stop()
+        observer.join()
+        
+        del self.observers[project_id]
+        del self.watchers[project_id]
+        
+        print(f"Stopped watching project {project_id}")
+
+    def list_projects(self) -> Dict[str, str]:
+        """Return a dictionary of watched projects and their paths."""
+        return {pid: watcher.project_path for pid, watcher in self.watchers.items()}
+
+    def stop_all(self):
+        """Stop watching all projects."""
+        for project_id in list(self.observers.keys()):
+            self.remove_project(project_id)
+
+def start_watching(project_paths: str | list[str]):
+    """Start watching one or multiple project directories for changes.
+    
+    Args:
+        project_paths: A single project path or list of project paths to watch
+    """
+    manager = ProjectWatcherManager()
+    
+    if isinstance(project_paths, str):
+        project_paths = [project_paths]
+        
+    for path in project_paths:
+        manager.add_project(path)
     
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        observer.stop()
-    observer.join() 
+        manager.stop_all() 

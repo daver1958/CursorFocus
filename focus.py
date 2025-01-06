@@ -5,6 +5,7 @@ from config import load_config
 from content_generator import generate_focus_content
 from rules_analyzer import RulesAnalyzer
 from rules_generator import RulesGenerator
+from rules_watcher import ProjectWatcherManager
 import logging
 from auto_updater import AutoUpdater
 
@@ -147,6 +148,10 @@ def monitor_project(project_config, global_config):
     focus_file = os.path.join(project_path, 'Focus.md')
     last_content = None
     last_update = 0
+
+    # Start rules watcher for this project
+    watcher = ProjectWatcherManager()
+    watcher.add_project(project_path, project_config['name'])
 
     while True:
         current_time = time.time()
