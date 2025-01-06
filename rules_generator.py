@@ -71,6 +71,72 @@ class RulesGenerator:
         if project_config:
             rules['project'].update(project_config)
         
+        # Add new AI behavior rules
+        rules['ai_behavior'].update({
+            'code_review': {
+                'focus_areas': [
+                    'security vulnerabilities',
+                    'performance bottlenecks',
+                    'code maintainability',
+                    'test coverage',
+                    'documentation quality'
+                ],
+                'review_checklist': [
+                    'check for proper error handling',
+                    'verify input validation',
+                    'assess code complexity',
+                    'review naming conventions',
+                    'evaluate test quality'
+                ]
+            },
+            'documentation': {
+                'required_sections': [
+                    'overview',
+                    'installation',
+                    'usage',
+                    'api reference',
+                    'contributing guidelines'
+                ],
+                'code_comments': {
+                    'require_docstrings': True,
+                    'require_type_hints': True,
+                    'require_examples': True
+                }
+            },
+            'refactoring': {
+                'triggers': [
+                    'code duplication',
+                    'complex conditionals',
+                    'long methods',
+                    'large classes',
+                    'tight coupling'
+                ],
+                'strategies': [
+                    'extract method',
+                    'extract class',
+                    'introduce parameter object',
+                    'replace conditional with polymorphism',
+                    'introduce interface'
+                ]
+            },
+            'optimization': {
+                'metrics': [
+                    'execution time',
+                    'memory usage',
+                    'network latency',
+                    'database performance',
+                    'resource utilization'
+                ],
+                'strategies': [
+                    'caching',
+                    'lazy loading',
+                    'connection pooling',
+                    'query optimization',
+                    'asynchronous processing'
+                ]
+            }
+        })
+        
         return rules
 
     def _get_framework_rules(self, framework: str) -> List[str]:
@@ -83,7 +149,13 @@ class RulesGenerator:
                 'implement proper prop types',
                 'use context API appropriately',
                 'leverage React.lazy for code splitting',
-                'follow component composition patterns'
+                'follow component composition patterns',
+                'implement proper error boundaries',
+                'use proper state management patterns',
+                'follow React performance best practices',
+                'implement proper form handling',
+                'use proper routing strategies',
+                'follow proper security practices'
             ],
             'react-ts': [
                 'use proper TypeScript interfaces for props',
@@ -178,6 +250,42 @@ class RulesGenerator:
                 'follow Spring Boot conventions',
                 'use dependency injection',
                 'implement proper service architecture'
+            ],
+            'fastapi': [
+                'use proper dependency injection',
+                'implement async/await patterns',
+                'use proper path operations',
+                'implement proper security middleware',
+                'use proper response models',
+                'follow FastAPI best practices',
+                'implement proper error handling'
+            ],
+            'express': [
+                'use proper middleware patterns',
+                'implement proper route handlers',
+                'use proper error handling',
+                'implement proper authentication',
+                'follow Express.js best practices',
+                'use proper database integration',
+                'implement proper API versioning'
+            ],
+            'nest': [
+                'use proper decorators',
+                'implement proper dependency injection',
+                'use proper module structure',
+                'follow NestJS architecture patterns',
+                'implement proper guards and interceptors',
+                'use proper exception filters',
+                'follow proper testing practices'
+            ],
+            'nuxt': [
+                'use proper Nuxt.js modules',
+                'implement proper SSR strategies',
+                'use proper routing patterns',
+                'follow Nuxt.js directory structure',
+                'implement proper state management',
+                'use proper middleware',
+                'follow Nuxt.js best practices'
             ]
         }
         return framework_rules.get(framework.lower(), [])
@@ -192,7 +300,13 @@ class RulesGenerator:
                 'use context managers for resource handling',
                 'leverage decorators for code reuse',
                 'use f-strings for string formatting',
-                'implement proper exception hierarchies'
+                'implement proper exception hierarchies',
+                'use proper async/await patterns',
+                'follow proper package structure',
+                'implement proper logging',
+                'use proper dependency management',
+                'follow proper testing practices',
+                'implement proper configuration management'
             ],
             'javascript': [
                 'use modern ES features',
@@ -256,11 +370,11 @@ class RulesGenerator:
             'rust': [
                 'follow Rust idioms',
                 'use proper ownership patterns',
-                'leverage the type system',
                 'implement proper error handling',
-                'use traits effectively',
-                'follow borrowing rules',
-                'use cargo workspace structure'
+                'use proper trait implementations',
+                'follow memory safety guidelines',
+                'use proper macro patterns',
+                'implement proper async patterns'
             ],
             'php': [
                 'follow PSR standards',
@@ -299,22 +413,22 @@ class RulesGenerator:
                 'use proper gem structure'
             ],
             'kotlin': [
-                'follow Kotlin coding conventions',
-                'use null safety features',
-                'leverage extension functions',
-                'use coroutines for async operations',
-                'implement proper error handling',
-                'use data classes effectively',
-                'leverage sealed classes'
+                'use proper null safety',
+                'implement proper coroutines',
+                'use proper extension functions',
+                'follow Kotlin idioms',
+                'implement proper data classes',
+                'use proper scope functions',
+                'follow proper functional programming patterns'
             ],
             'swift': [
-                'follow Swift API Design Guidelines',
-                'use proper access control',
-                'leverage Swift type system',
-                'use protocol-oriented programming',
+                'use proper optionals',
+                'implement proper protocols',
+                'use proper value types',
+                'follow Swift idioms',
                 'implement proper error handling',
-                'use optionals effectively',
-                'leverage value types'
+                'use proper memory management',
+                'follow proper concurrency patterns'
             ]
         }
         return language_rules.get(language.lower(), [])
@@ -597,27 +711,44 @@ class RulesGenerator:
         } 
 
     def _get_project_structure_from_focus(self) -> Dict[str, Any]:
-        """Extract project structure information from Focus.md."""
-        focus_md_path = os.path.join(self.project_path, 'Focus.md')
-        if not os.path.exists(focus_md_path):
-            return {}
-            
-        structure_info = {
-            "components": [],
-            "metrics": {},
-            "code_quality": {},
-            "key_files": []
-        }
-        
+        """Get project structure information from Focus.md."""
         try:
-            with open(focus_md_path, 'r', encoding='utf-8') as f:
+            with open(os.path.join(self.project_path, 'Focus.md'), 'r', encoding='utf-8') as f:
                 content = f.read()
+                
+            structure = {
+                'components': [],
+                'component_explanations': {},
+                'metrics': {
+                    'total_files': 0,
+                    'total_lines': 0
+                },
+                'code_quality': {
+                    'alerts': []
+                },
+                'key_files': [],
+                'architecture': {
+                    'layers': [],
+                    'dependencies': [],
+                    'patterns': []
+                },
+                'documentation': {
+                    'coverage': 0,
+                    'quality_score': 0,
+                    'missing_sections': []
+                },
+                'testing': {
+                    'coverage': 0,
+                    'passing_rate': 0,
+                    'critical_paths': []
+                }
+            }
                 
             # Extract components section
             components_match = re.search(r'\*\*Key Components:\*\*\n(.*?)\n\n', content, re.DOTALL)
             if components_match:
                 components = components_match.group(1).strip().split('\n')
-                structure_info["components"] = [c.strip('├─ └─ │ ').strip() for c in components]
+                structure["components"] = [c.strip('├─ └─ │ ').strip() for c in components]
                 
             # Extract metrics
             metrics_match = re.search(r'# Project Metrics Summary\n(.*?)\n\n', content, re.DOTALL)
@@ -626,24 +757,75 @@ class RulesGenerator:
                 total_files = re.search(r'Total Files: (\d+)', metrics_text)
                 total_lines = re.search(r'Total Lines: ([\d,]+)', metrics_text)
                 if total_files:
-                    structure_info["metrics"]["total_files"] = int(total_files.group(1))
+                    structure["metrics"]["total_files"] = int(total_files.group(1))
                 if total_lines:
-                    structure_info["metrics"]["total_lines"] = int(total_lines.group(1).replace(',', ''))
+                    structure["metrics"]["total_lines"] = int(total_lines.group(1).replace(',', ''))
                     
             # Extract code quality alerts
             quality_match = re.search(r'\*\*Code Quality Alerts:\*\*(.*?)\n\n', content, re.DOTALL)
             if quality_match:
                 alerts = quality_match.group(1).strip().split('\n')
-                structure_info["code_quality"]["alerts"] = [a.strip('- ').strip() for a in alerts]
+                structure["code_quality"]["alerts"] = [a.strip('- ').strip() for a in alerts]
                 
             # Extract key files with their responsibilities
             files_section = re.findall(r'`([^`]+)`.*?\n\*\*Main Responsibilities:\*\* ([^\n]+)', content)
-            structure_info["key_files"] = [{"name": f[0], "responsibility": f[1]} for f in files_section]
+            structure["key_files"] = [{"name": f[0], "responsibility": f[1]} for f in files_section]
                 
+            # Extract architecture section
+            architecture_match = re.search(r'\*\*Architecture:\*\*\n(.*?)\n\n', content, re.DOTALL)
+            if architecture_match:
+                architecture_text = architecture_match.group(1)
+                layers_match = re.search(r'Layers:\n(.*?)\n\n', architecture_text)
+                if layers_match:
+                    layers = layers_match.group(1).strip().split('\n')
+                    structure["architecture"]["layers"] = [l.strip() for l in layers]
+                
+                dependencies_match = re.search(r'Dependencies:\n(.*?)\n\n', architecture_text)
+                if dependencies_match:
+                    dependencies = dependencies_match.group(1).strip().split('\n')
+                    structure["architecture"]["dependencies"] = [d.strip() for d in dependencies]
+                
+                patterns_match = re.search(r'Patterns:\n(.*?)\n\n', architecture_text)
+                if patterns_match:
+                    patterns = patterns_match.group(1).strip().split('\n')
+                    structure["architecture"]["patterns"] = [p.strip() for p in patterns]
+                
+            # Extract documentation section
+            documentation_match = re.search(r'\*\*Documentation:\*\*\n(.*?)\n\n', content, re.DOTALL)
+            if documentation_match:
+                documentation_text = documentation_match.group(1)
+                coverage_match = re.search(r'Coverage: (\d+)%', documentation_text)
+                if coverage_match:
+                    structure["documentation"]["coverage"] = int(coverage_match.group(1))
+                
+                quality_score_match = re.search(r'Quality Score: (\d+)', documentation_text)
+                if quality_score_match:
+                    structure["documentation"]["quality_score"] = int(quality_score_match.group(1))
+                
+                missing_sections_match = re.findall(r'- (.*)', documentation_text)
+                if missing_sections_match:
+                    structure["documentation"]["missing_sections"] = [s.strip() for s in missing_sections_match]
+                
+            # Extract testing section
+            testing_match = re.search(r'\*\*Testing:\*\*\n(.*?)\n\n', content, re.DOTALL)
+            if testing_match:
+                testing_text = testing_match.group(1)
+                coverage_match = re.search(r'Coverage: (\d+)%', testing_text)
+                if coverage_match:
+                    structure["testing"]["coverage"] = int(coverage_match.group(1))
+                
+                passing_rate_match = re.search(r'Passing Rate: (\d+)%', testing_text)
+                if passing_rate_match:
+                    structure["testing"]["passing_rate"] = int(passing_rate_match.group(1))
+                
+                critical_paths_match = re.findall(r'- (.*)', testing_text)
+                if critical_paths_match:
+                    structure["testing"]["critical_paths"] = [p.strip() for p in critical_paths_match]
+                
+            return structure
         except Exception as e:
-            print(f"Error parsing Focus.md: {e}")
-            
-        return structure_info
+            print(f"Error reading Focus.md: {e}")
+            return {}
 
     def _generate_component_explanations(self, components: List[str]) -> Dict[str, str]:
         """Generate natural language explanations for each component based on its role and purpose."""
@@ -652,108 +834,150 @@ class RulesGenerator:
         # Common file type patterns and their explanations
         file_patterns = {
             # Configuration files
-            r'.*\.json$': "A configuration file that defines settings and parameters",
-            r'.*\.ya?ml$': "A YAML configuration file that defines settings in a human-readable format",
-            r'.*\.toml$': "A TOML configuration file that defines project settings and metadata",
-            r'.*\.ini$': "An initialization file that stores configuration settings",
-            r'.*\.env.*': "An environment configuration file that stores sensitive settings and keys",
+            r'.*\.json$': "A JSON configuration file that defines application settings, dependencies, and project metadata in a structured format",
+            r'.*\.ya?ml$': "A YAML configuration file that defines application settings and infrastructure configurations in a human-readable format",
+            r'.*\.toml$': "A TOML configuration file that defines project settings, dependencies, and build configurations with strong typing",
+            r'.*\.ini$': "An initialization file that stores application configuration settings in a simple key-value format",
+            r'.*\.env.*': "An environment configuration file that securely stores sensitive settings, API keys, and environment-specific variables",
+            r'.*\.config.*': "A configuration file that defines application settings, build options, and runtime parameters",
             
             # Documentation files
-            r'.*\.md$': "A documentation file written in Markdown format",
-            r'.*\.rst$': "A documentation file written in reStructuredText format",
-            r'.*\.txt$': "A plain text file containing documentation or information",
-            r'.*LICENSE.*': "A license file specifying terms of use and distribution",
-            r'.*README.*': "A documentation file providing project overview and setup instructions",
-            r'.*CHANGELOG.*': "A file tracking version history and changes",
+            r'.*\.md$': "A Markdown documentation file providing project information, guides, and technical documentation in a readable format",
+            r'.*\.rst$': "A reStructuredText documentation file offering detailed technical documentation with advanced formatting features",
+            r'.*\.txt$': "A plain text file containing project documentation, notes, or general information in a simple format",
+            r'.*LICENSE.*': "A license file specifying the terms of use, distribution, and legal requirements for the project",
+            r'.*README.*': "A comprehensive documentation file providing project overview, setup instructions, and usage guidelines",
+            r'.*CHANGELOG.*': "A detailed log file tracking version history, feature additions, bug fixes, and breaking changes",
+            r'.*CONTRIBUTING.*': "A guide outlining contribution guidelines, coding standards, and development workflow for contributors",
+            r'.*CODE_OF_CONDUCT.*': "A document defining community standards, expected behavior, and guidelines for project participation",
             
             # Source code files by language
-            r'.*\.py$': "A Python source code file",
-            r'.*\.js$': "A JavaScript source code file",
-            r'.*\.ts$': "A TypeScript source code file with type-safe implementations",
-            r'.*\.jsx?$': "A React component file",
-            r'.*\.tsx?$': "A TypeScript React component",
-            r'.*\.vue$': "A Vue.js component file",
-            r'.*\.go$': "A Go source code file",
-            r'.*\.rs$': "A Rust source code file",
-            r'.*\.java$': "A Java source code file",
-            r'.*\.kt$': "A Kotlin source code file",
-            r'.*\.swift$': "A Swift source code file",
-            r'.*\.c$': "A C source code file",
-            r'.*\.cpp$': "A C++ source code file",
-            r'.*\.cs$': "A C# source code file",
-            r'.*\.rb$': "A Ruby source code file",
-            r'.*\.php$': "A PHP source code file",
+            r'.*\.py$': "A Python source code file implementing application logic, classes, and functions with type hints and documentation",
+            r'.*\.pyi$': "A Python interface file defining type hints and function signatures for improved type checking",
+            r'.*\.js$': "A JavaScript source code file implementing client-side or server-side functionality with modern ES features",
+            r'.*\.ts$': "A TypeScript source code file providing type-safe implementations with interfaces and advanced type features",
+            r'.*\.jsx?$': "A React component file implementing UI components with JSX syntax and component lifecycle management",
+            r'.*\.tsx?$': "A TypeScript React component providing type-safe UI implementations with proper prop typing",
+            r'.*\.vue$': "A Vue.js component file implementing self-contained components with template, script, and style sections",
+            r'.*\.go$': "A Go source code file implementing efficient and concurrent functionality with strong type safety",
+            r'.*\.rs$': "A Rust source code file providing memory-safe implementations with ownership system and zero-cost abstractions",
+            r'.*\.java$': "A Java source code file implementing object-oriented functionality with strong typing and platform independence",
+            r'.*\.kt$': "A Kotlin source code file offering modern language features with Java interoperability and null safety",
+            r'.*\.swift$': "A Swift source code file implementing iOS/macOS functionality with modern syntax and strong type safety",
+            r'.*\.c$': "A C source code file implementing low-level system functionality with manual memory management",
+            r'.*\.cpp$': "A C++ source code file providing object-oriented implementations with modern C++ features and STL",
+            r'.*\.cs$': "A C# source code file implementing .NET functionality with modern language features and type safety",
+            r'.*\.rb$': "A Ruby source code file offering dynamic programming with elegant syntax and metaprogramming features",
+            r'.*\.php$': "A PHP source code file implementing server-side functionality with modern PHP features and type declarations",
             
             # Build and dependency files
-            r'.*requirements.*\.txt$': "A Python dependency specification file",
-            r'.*Gemfile$': "A Ruby dependency specification file",
-            r'.*package\.json$': "A Node.js project and dependency configuration file",
-            r'.*Cargo\.toml$': "A Rust project and dependency configuration file",
-            r'.*pom\.xml$': "A Maven project configuration file for Java",
-            r'.*build\.gradle.*$': "A Gradle build configuration file",
-            r'.*CMakeLists\.txt$': "A CMake build configuration file",
-            r'.*Makefile$': "A Make build configuration file",
+            r'.*requirements.*\.txt$': "A Python dependency specification file listing required packages with version constraints",
+            r'.*Pipfile$': "A modern Python dependency management file using Pipenv for deterministic dependencies",
+            r'.*poetry\.toml$': "A Poetry configuration file for Python dependency management with advanced features",
+            r'.*Gemfile$': "A Ruby dependency specification file managing gem dependencies with Bundler",
+            r'.*package\.json$': "A Node.js project configuration file managing dependencies, scripts, and project metadata",
+            r'.*package-lock\.json$': "A detailed dependency lock file ensuring consistent installations across environments",
+            r'.*yarn\.lock$': "A Yarn dependency lock file providing deterministic dependency resolution",
+            r'.*Cargo\.toml$': "A Rust project configuration file managing dependencies and build settings",
+            r'.*Cargo\.lock$': "A Rust dependency lock file ensuring reproducible builds across environments",
+            r'.*pom\.xml$': "A Maven project configuration file managing Java dependencies and build lifecycle",
+            r'.*build\.gradle.*$': "A Gradle build configuration file defining build logic and dependencies with Groovy/Kotlin DSL",
+            r'.*CMakeLists\.txt$': "A CMake build configuration file defining build system generation for C/C++ projects",
+            r'.*Makefile$': "A Make build configuration file defining build rules and dependencies",
             
             # Test files
-            r'.*test.*\.py$': "A Python test file",
-            r'.*spec.*\.js$': "A JavaScript test specification file",
-            r'.*test.*\.js$': "A JavaScript test file",
-            r'.*test.*\.ts$': "A TypeScript test file",
-            r'.*Test\.java$': "A Java test file",
-            r'.*_test\.go$': "A Go test file",
+            r'.*test.*\.py$': "A Python test file containing unit tests, integration tests, and test fixtures",
+            r'.*conftest\.py$': "A pytest configuration file defining shared test fixtures and configuration",
+            r'.*spec.*\.js$': "A JavaScript test specification file using behavior-driven development patterns",
+            r'.*test.*\.js$': "A JavaScript test file implementing unit and integration tests",
+            r'.*test.*\.ts$': "A TypeScript test file with type-safe test implementations",
+            r'.*Test\.java$': "A Java test file implementing JUnit tests with assertions and test lifecycle",
+            r'.*_test\.go$': "A Go test file implementing table-driven tests and benchmarks",
+            r'.*\.spec\.ts$': "A TypeScript test specification file with type-safe test implementations",
             
             # Script files
-            r'.*\.sh$': "A shell script for automation and system tasks",
-            r'.*\.bat$': "A Windows batch script for automation tasks",
-            r'.*\.ps1$': "A PowerShell script for Windows automation",
+            r'.*\.sh$': "A shell script automating system tasks and deployment processes",
+            r'.*\.bat$': "A Windows batch script automating Windows-specific tasks",
+            r'.*\.ps1$': "A PowerShell script implementing advanced Windows automation",
+            r'.*\.bash.*$': "A Bash script providing Unix shell automation with advanced features",
+            r'.*\.zsh.*$': "A Zsh script implementing shell automation with extended features",
             
             # Web files
-            r'.*\.html?$': "A HTML file defining web page structure",
-            r'.*\.css$': "A CSS file defining styles and layouts",
-            r'.*\.scss$': "A SASS stylesheet with extended CSS features",
-            r'.*\.less$': "A LESS stylesheet with extended CSS features",
+            r'.*\.html?$': "A HTML file defining web page structure and content with semantic markup",
+            r'.*\.css$': "A CSS file implementing styles and responsive layouts with modern features",
+            r'.*\.scss$': "A SASS stylesheet implementing modular styles with variables and mixins",
+            r'.*\.less$': "A LESS stylesheet providing dynamic styles with variables and functions",
+            r'.*\.styl$': "A Stylus stylesheet offering expressive styling with advanced features",
+            r'.*\.svg$': "A scalable vector graphics file defining resolution-independent graphics",
             
             # Data files
-            r'.*\.sql$': "A SQL file containing database queries and schema",
-            r'.*\.csv$': "A comma-separated values data file",
-            r'.*\.json$': "A JSON data file storing structured information",
-            r'.*\.xml$': "An XML data file storing structured information"
+            r'.*\.sql$': "A SQL file containing database schema definitions and complex queries",
+            r'.*\.csv$': "A comma-separated values file storing tabular data in a text format",
+            r'.*\.json$': "A JSON data file storing structured data with nested objects and arrays",
+            r'.*\.xml$': "An XML data file storing hierarchical data with schema validation",
+            r'.*\.proto$': "A Protocol Buffers definition file for efficient data serialization",
+            r'.*\.graphql$': "A GraphQL schema file defining API types and operations",
+            r'.*\.avro$': "An Apache Avro data file for efficient data serialization",
+            r'.*\.parquet$': "A Parquet columnar storage file optimized for big data processing"
         }
         
         # Directory role patterns
         directory_patterns = {
-            r'.*src.*': "Source code directory",
-            r'.*test.*': "Test files directory",
-            r'.*docs?.*': "Documentation directory",
-            r'.*config.*': "Configuration directory",
-            r'.*scripts?.*': "Scripts directory",
-            r'.*tools?.*': "Development tools directory",
-            r'.*assets?.*': "Static assets directory",
-            r'.*templates?.*': "Templates directory",
-            r'.*public.*': "Public files directory",
-            r'.*private.*': "Private resources directory",
-            r'.*dist.*': "Distribution directory",
-            r'.*build.*': "Build output directory",
-            r'.*vendor.*': "Third-party dependencies directory",
-            r'.*node_modules.*': "Node.js dependencies directory",
-            r'.*venv.*': "Python virtual environment directory",
-            r'.*bin.*': "Binary files directory",
-            r'.*lib.*': "Library files directory",
-            r'.*api.*': "API implementations directory",
-            r'.*ui.*': "User interface components directory",
-            r'.*utils?.*': "Utility functions directory",
-            r'.*helpers?.*': "Helper functions directory",
-            r'.*models?.*': "Data models directory",
-            r'.*controllers?.*': "Controller logic directory",
-            r'.*views?.*': "View components directory",
-            r'.*services?.*': "Service implementations directory",
-            r'.*middleware.*': "Middleware components directory",
-            r'.*migrations?.*': "Database migrations directory",
-            r'.*static.*': "Static files directory",
-            r'.*media.*': "Media files directory",
-            r'.*logs?.*': "Log files directory",
-            r'.*cache.*': "Cache directory",
-            r'.*backup.*': "Backup files directory"
+            r'.*src.*': "Source code directory containing the main application implementation files",
+            r'.*test.*': "Test directory containing unit tests, integration tests, and test resources",
+            r'.*docs?.*': "Documentation directory storing project documentation, guides, and API references",
+            r'.*config.*': "Configuration directory containing various application and environment configurations",
+            r'.*scripts?.*': "Scripts directory containing automation scripts and development tools",
+            r'.*tools?.*': "Development tools directory containing utilities and helper scripts",
+            r'.*assets?.*': "Assets directory storing static resources like images, fonts, and media files",
+            r'.*templates?.*': "Templates directory containing reusable template files and code generators",
+            r'.*public.*': "Public directory containing publicly accessible static files and resources",
+            r'.*private.*': "Private directory storing sensitive resources and internal configurations",
+            r'.*dist.*': "Distribution directory containing built and optimized production files",
+            r'.*build.*': "Build directory containing compilation outputs and build artifacts",
+            r'.*vendor.*': "Third-party dependencies directory managed by package managers",
+            r'.*node_modules.*': "Node.js dependencies directory containing installed npm packages",
+            r'.*venv.*': "Python virtual environment directory isolating project dependencies",
+            r'.*bin.*': "Binary directory containing executable files and compiled outputs",
+            r'.*lib.*': "Library directory containing shared code libraries and modules",
+            r'.*api.*': "API directory implementing backend services and API endpoints",
+            r'.*ui.*': "User interface directory containing frontend components and layouts",
+            r'.*utils?.*': "Utilities directory containing helper functions and shared code",
+            r'.*helpers?.*': "Helpers directory providing utility functions and common operations",
+            r'.*models?.*': "Models directory containing data models and database schemas",
+            r'.*controllers?.*': "Controllers directory implementing business logic and request handling",
+            r'.*views?.*': "Views directory containing UI templates and view components",
+            r'.*services?.*': "Services directory implementing business logic and external integrations",
+            r'.*middleware.*': "Middleware directory containing request/response processing components",
+            r'.*migrations?.*': "Migrations directory managing database schema changes and data migrations",
+            r'.*static.*': "Static files directory containing unchanging assets and resources",
+            r'.*media.*': "Media directory storing user-uploaded files and media content",
+            r'.*logs?.*': "Logs directory containing application logs and error tracking",
+            r'.*cache.*': "Cache directory storing temporary data for performance optimization",
+            r'.*backup.*': "Backup directory containing data backups and recovery files",
+            r'.*hooks?.*': "Hooks directory containing Git hooks and event handlers",
+            r'.*plugins?.*': "Plugins directory containing extensible plugin implementations",
+            r'.*packages?.*': "Packages directory managing multiple related packages in a monorepo",
+            r'.*modules?.*': "Modules directory containing modular application components",
+            r'.*components?.*': "Components directory storing reusable UI components",
+            r'.*layouts?.*': "Layouts directory containing page layouts and templates",
+            r'.*pages?.*': "Pages directory implementing route-based page components",
+            r'.*styles?.*': "Styles directory containing CSS and styling resources",
+            r'.*themes?.*': "Themes directory managing different visual themes",
+            r'.*locales?.*': "Locales directory containing internationalization resources",
+            r'.*constants?.*': "Constants directory defining shared constant values",
+            r'.*types?.*': "Types directory containing TypeScript type definitions",
+            r'.*interfaces?.*': "Interfaces directory defining TypeScript interfaces",
+            r'.*contexts?.*': "Contexts directory implementing React context providers",
+            r'.*reducers?.*': "Reducers directory containing state management logic",
+            r'.*actions?.*': "Actions directory defining state management actions",
+            r'.*store.*': "Store directory implementing state management configuration",
+            r'.*fixtures?.*': "Fixtures directory containing test data and mock objects",
+            r'.*mocks?.*': "Mocks directory containing mock implementations for testing",
+            r'.*coverage.*': "Coverage directory containing test coverage reports",
+            r'.*reports?.*': "Reports directory storing various analysis reports",
+            r'.*examples?.*': "Examples directory containing sample code and usage examples",
+            r'.*tutorials?.*': "Tutorials directory providing learning resources and guides"
         }
         
         for component in components:
@@ -761,7 +985,7 @@ class RulesGenerator:
             
             # Check if it's a directory
             if '\ud83d\udcc1' in component:  # Folder emoji
-                explanation = "Project files directory"
+                explanation = "Project directory containing related files and resources"
                 for pattern, desc in directory_patterns.items():
                     if re.search(pattern, clean_name, re.IGNORECASE):
                         explanation = desc
@@ -770,7 +994,7 @@ class RulesGenerator:
                 continue
             
             # Check file patterns
-            explanation = "Project file"
+            explanation = "Project file containing application code or resources"
             for pattern, desc in file_patterns.items():
                 if re.search(pattern, clean_name, re.IGNORECASE):
                     explanation = desc
