@@ -24,7 +24,7 @@ Join our Discord server to discuss features, ask questions: [Discord](https://di
 
 1. Clone CursorFocus into your project:
    ```bash
-   git clone https://github.com/Dror-Bengal/CursorFocus.git
+   git clone https://github.com/RenjiYuusei/CursorFocus.git
    ```
 
 2. Make the run script executable:
@@ -132,7 +132,7 @@ CursorFocus automatically generates and maintains three key files:
 
 1. Clone or copy the CursorFocus directory to your project:
    ```bash
-   git clone https://github.com/Dror-Bengal/CursorFocus.git CursorFocus
+   git clone https://github.com/RenjiYuusei/CursorFocus.git CursorFocus
    ```
 
 2. Install dependencies (Python 3.6+ required):
@@ -290,6 +290,7 @@ CursorFocus automatically detects and provides specialized information for:
 - Node.js Projects (package.json)
 - Python Projects (setup.py, pyproject.toml)
 - Generic Projects (basic structure)
+
 
 ## Contributing
 
