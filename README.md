@@ -20,29 +20,6 @@ Join our Discord server to discuss features, ask questions: [Discord](https://di
 - 🧩 Modular and extensible design
 - 🎛️ Automatic .cursorrules generation and project adaptation
 
-## Quick Start
-
-1. Clone CursorFocus into your project:
-   ```bash
-   git clone https://github.com/RenjiYuusei/CursorFocus.git
-   ```
-
-2. Make the run script executable:
-   ```bash
-   chmod +x CursorFocus/run.sh
-   ```
-
-3. Start CursorFocus:
-   ```bash
-   ./CursorFocus/run.sh
-   ```
-
-That's it! CursorFocus will automatically:
-- Create necessary configuration
-- Install dependencies
-- Start monitoring your project
-- Generate Focus.md documentation
-
 ## Multi-Project Support
 
 CursorFocus can monitor multiple projects simultaneously. There are two ways to set this up:
@@ -51,7 +28,7 @@ CursorFocus can monitor multiple projects simultaneously. There are two ways to 
 
 Run CursorFocus with the scan option to automatically detect projects:
 ```bash
-python3 CursorFocus/setup.py --scan /path/to/projects/directory
+python CursorFocus/setup.py --scan /path/to/projects/directory
 ```
 
 This will:
@@ -143,7 +120,7 @@ CursorFocus automatically generates and maintains three key files:
 
 3. Run the script:
    ```bash
-   python3 focus.py
+   python focus.py
    ```
 
 ## Setup
