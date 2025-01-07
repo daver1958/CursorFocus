@@ -914,6 +914,10 @@ class RulesGenerator:
             r'.*\.less$': "A LESS stylesheet providing dynamic styles with variables and functions",
             r'.*\.styl$': "A Stylus stylesheet offering expressive styling with advanced features",
             r'.*\.svg$': "A scalable vector graphics file defining resolution-independent graphics",
+            r'.*\.woff2?$': "A web font file providing custom typography for web applications",
+            r'.*\.eot$': "An embedded OpenType font file for legacy web browser support",
+            r'.*\.ttf$': "A TrueType font file for custom typography across platforms",
+            r'.*\.otf$': "An OpenType font file supporting advanced typography features",
             
             # Data files
             r'.*\.sql$': "A SQL file containing database schema definitions and complex queries",
@@ -923,7 +927,102 @@ class RulesGenerator:
             r'.*\.proto$': "A Protocol Buffers definition file for efficient data serialization",
             r'.*\.graphql$': "A GraphQL schema file defining API types and operations",
             r'.*\.avro$': "An Apache Avro data file for efficient data serialization",
-            r'.*\.parquet$': "A Parquet columnar storage file optimized for big data processing"
+            r'.*\.parquet$': "A Parquet columnar storage file optimized for big data processing",
+            r'.*\.yaml$': "A YAML data file storing configuration in a human-readable format",
+            r'.*\.toml$': "A TOML data file offering clear and minimal syntax for configurations",
+            r'.*\.ini$': "An INI configuration file using simple key-value pair format",
+            r'.*\.env$': "An environment file storing sensitive configuration variables",
+            
+            # Image files
+            r'.*\.png$': "A PNG image file providing lossless compression for graphics",
+            r'.*\.jpe?g$': "A JPEG image file using lossy compression for photographs",
+            r'.*\.gif$': "A GIF image file supporting simple animations and transparency",
+            r'.*\.webp$': "A WebP image file offering superior compression and quality",
+            r'.*\.ico$': "An icon file containing multiple sizes for favicon display",
+            r'.*\.bmp$': "A bitmap image file storing uncompressed pixel data",
+            
+            # Media files
+            r'.*\.mp4$': "An MP4 video file using efficient video compression",
+            r'.*\.webm$': "A WebM video file optimized for web streaming",
+            r'.*\.mp3$': "An MP3 audio file with lossy compression for music",
+            r'.*\.wav$': "A WAV audio file storing uncompressed audio data",
+            r'.*\.ogg$': "An OGG container file for audio and video content",
+            r'.*\.flac$': "A FLAC audio file providing lossless audio compression",
+            
+            # Document files
+            r'.*\.pdf$': "A PDF document file preserving formatting across platforms",
+            r'.*\.docx?$': "A Microsoft Word document file for rich text content",
+            r'.*\.xlsx?$': "A Microsoft Excel spreadsheet file for tabular data",
+            r'.*\.pptx?$': "A Microsoft PowerPoint presentation file",
+            r'.*\.odt$': "An OpenDocument text file for cross-platform compatibility",
+            r'.*\.ods$': "An OpenDocument spreadsheet for open-source compatibility",
+            
+            # Archive files
+            r'.*\.zip$': "A ZIP archive file containing compressed files and folders",
+            r'.*\.tar$': "A TAR archive file bundling multiple files together",
+            r'.*\.gz$': "A GZIP compressed file for efficient storage",
+            r'.*\.7z$': "A 7-Zip archive offering high compression ratios",
+            r'.*\.rar$': "A RAR archive file with advanced compression features",
+            
+            # Mobile development
+            r'.*\.swift$': "A Swift source file for iOS and macOS development",
+            r'.*\.kt$': "A Kotlin source file for Android development",
+            r'.*\.xcodeproj$': "An Xcode project configuration for iOS development",
+            r'.*\.pbxproj$': "An Xcode project file defining build settings",
+            r'.*\.storyboard$': "An iOS storyboard file defining UI flow and layout",
+            r'.*\.xib$': "An iOS interface builder file for UI components",
+            r'.*\.gradle$': "A Gradle build configuration file for Android projects",
+            
+            # Development directories
+            r'.*ci.*': "Continuous Integration directory containing pipeline configurations",
+            r'.*deploy.*': "Deployment directory containing deployment scripts and configs",
+            r'.*docker.*': "Docker directory containing container configurations",
+            r'.*k8s.*': "Kubernetes directory containing cluster configurations",
+            r'.*terraform.*': "Infrastructure as Code directory for cloud resources",
+            r'.*ansible.*': "Configuration management directory for automation",
+            r'.*helm.*': "Helm charts directory for Kubernetes deployments",
+            r'.*nginx.*': "Nginx configuration directory for web serving",
+            r'.*apache.*': "Apache configuration directory for web serving",
+            
+            # Feature-specific directories
+            r'.*auth.*': "Authentication directory handling user authentication",
+            r'.*search.*': "Search functionality directory implementing search features",
+            r'.*upload.*': "File upload directory managing file uploads",
+            r'.*payment.*': "Payment processing directory handling transactions",
+            r'.*notification.*': "Notification system directory managing alerts",
+            r'.*analytics.*': "Analytics directory tracking user behavior",
+            r'.*monitoring.*': "Monitoring directory for system health checks",
+            r'.*backup.*': "Backup directory containing data backups",
+            r'.*security.*': "Security directory implementing protection measures",
+            
+            # Framework-specific directories
+            r'.*redux.*': "Redux state management directory",
+            r'.*vuex.*': "Vuex state management for Vue.js",
+            r'.*mobx.*': "MobX state management directory",
+            r'.*graphql.*': "GraphQL API implementation directory",
+            r'.*websocket.*': "WebSocket implementation directory",
+            r'.*worker.*': "Worker processes directory for background tasks",
+            r'.*queue.*': "Queue processing directory for async tasks",
+            r'.*cache.*': "Cache management directory for performance",
+            r'.*proxy.*': "Proxy configuration directory for routing",
+            
+            # Quality assurance directories
+            r'.*qa.*': "Quality Assurance directory for testing resources",
+            r'.*benchmark.*': "Benchmarking directory for performance tests",
+            r'.*stress-test.*': "Stress testing directory for load testing",
+            r'.*coverage.*': "Code coverage directory for test reports",
+            r'.*lint.*': "Linting configuration directory for code quality",
+            r'.*audit.*': "Security audit directory for vulnerability checks",
+            r'.*review.*': "Code review directory for review processes",
+            
+            # Documentation directories
+            r'.*wiki.*': "Wiki directory containing project documentation",
+            r'.*manual.*': "User manual directory with usage guides",
+            r'.*reference.*': "API reference documentation directory",
+            r'.*guide.*': "User guide directory with tutorials",
+            r'.*example.*': "Example code directory with demos",
+            r'.*sample.*': "Sample projects directory with templates",
+            r'.*showcase.*': "Showcase directory highlighting features"
         }
         
         # Directory role patterns
