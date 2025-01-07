@@ -86,7 +86,7 @@ NON_CODE_EXTENSIONS = {
 CODE_EXTENSIONS = {
     '.js', '.jsx', '.ts', '.tsx', '.py', '.java', '.cpp', '.c', '.h', 
     '.hpp', '.cs', '.go', '.rb', '.php', '.phtml', '.ctp',
-    '.swift', '.kt', '.kts'
+    '.swift', '.kt', '.kts', '.lua'
 }
 
 # Regex patterns for function detection
@@ -106,7 +106,9 @@ FUNCTION_PATTERNS = {
     'swift_function': r'(?:func\s+)([a-zA-Z_]\w*)\s*(?:<[^>]+>)?\s*\([^)]*\)(?:\s*->\s*[^{]+)?\s*{',
     'swift_property': r'(?:var|let)\s+([a-zA-Z_]\w*)\s*:\s*[^{]+\s*{\s*(?:get|set|willSet|didSet)',
     'go_function': r'func\s+([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*\([^)]*\))?\s*{',
-    'go_method': r'func\s*\([^)]*\)\s*([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*\([^)]*\))?\s*{'
+    'go_method': r'func\s*\([^)]*\)\s*([a-zA-Z_]\w*)\s*\([^)]*\)(?:\s*\([^)]*\))?\s*{',
+    'lua_function': r'(?:local\s+)?function\s+([a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*)\s*\([^)]*\)',
+    'lua_method': r'function\s+[a-zA-Z_]\w*:([a-zA-Z_]\w*)\s*\([^)]*\)'
 }
 
 # Keywords that should not be treated as function names

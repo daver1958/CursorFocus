@@ -168,7 +168,8 @@ def detect_language_and_framework(project_path):
         'go': ['.go', 'go.mod'],
         'rust': ['.rs', 'Cargo.toml'],
         'c++': ['.cpp', '.hpp', '.cc', '.cxx'],
-        'c#': ['.cs', '.csproj', '.sln']
+        'c#': ['.cs', '.csproj', '.sln'],
+        'lua': ['.lua', 'init.lua', 'main.lua', 'config.lua']
     }
     
     # Framework detection based on specific files/directories
@@ -325,7 +326,9 @@ def get_file_type_info(filename):
         '.gradle': ('Gradle Build', 'Android/Kotlin build configuration'),
         '.podspec': ('CocoaPods Spec', 'iOS dependency specification'),
         '.storyboard': ('iOS Storyboard', 'iOS UI layout file'),
-        '.xib': ('iOS XIB', 'iOS UI component file')
+        '.xib': ('iOS XIB', 'iOS UI component file'),
+        '.lua': ('Lua Source', 'Lua script file implementing game logic or automation'),
+        '.rockspec': ('LuaRocks Spec', 'Lua package specification file')
     }
     
     return type_map.get(ext, ('Generic', 'Project file')) 

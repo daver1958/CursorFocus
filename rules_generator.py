@@ -434,6 +434,22 @@ class RulesGenerator:
                 'implement proper error handling',
                 'use proper memory management',
                 'follow proper concurrency patterns'
+            ],
+            'lua': [
+                'follow Lua style guide',
+                'use proper table management',
+                'implement proper metatables',
+                'use proper module patterns',
+                'leverage coroutines appropriately',
+                'implement proper error handling',
+                'use proper scope management',
+                'follow proper OOP patterns',
+                'use proper garbage collection practices',
+                'implement proper state management',
+                'use proper string manipulation',
+                'follow proper debugging practices',
+                'use proper package management',
+                'implement proper testing patterns'
             ]
         }
         return language_rules.get(language.lower(), [])
@@ -836,273 +852,40 @@ class RulesGenerator:
         """Generate natural language explanations for each component based on its role and purpose."""
         explanations = {}
         
-        # Common file type patterns and their explanations
-        file_patterns = {
-            # Configuration files
-            r'.*\.json$': "A JSON configuration file that defines application settings, dependencies, and project metadata in a structured format",
-            r'.*\.ya?ml$': "A YAML configuration file that defines application settings and infrastructure configurations in a human-readable format",
-            r'.*\.toml$': "A TOML configuration file that defines project settings, dependencies, and build configurations with strong typing",
-            r'.*\.ini$': "An initialization file that stores application configuration settings in a simple key-value format",
-            r'.*\.env.*': "An environment configuration file that securely stores sensitive settings, API keys, and environment-specific variables",
-            r'.*\.config.*': "A configuration file that defines application settings, build options, and runtime parameters",
-            
-            # Documentation files
-            r'.*\.md$': "A Markdown documentation file providing project information, guides, and technical documentation in a readable format",
-            r'.*\.rst$': "A reStructuredText documentation file offering detailed technical documentation with advanced formatting features",
-            r'.*\.txt$': "A plain text file containing project documentation, notes, or general information in a simple format",
-            r'.*LICENSE.*': "A license file specifying the terms of use, distribution, and legal requirements for the project",
-            r'.*README.*': "A comprehensive documentation file providing project overview, setup instructions, and usage guidelines",
-            r'.*CHANGELOG.*': "A detailed log file tracking version history, feature additions, bug fixes, and breaking changes",
-            r'.*CONTRIBUTING.*': "A guide outlining contribution guidelines, coding standards, and development workflow for contributors",
-            r'.*CODE_OF_CONDUCT.*': "A document defining community standards, expected behavior, and guidelines for project participation",
-            
-            # Source code files by language
-            r'.*\.py$': "A Python source code file implementing application logic, classes, and functions with type hints and documentation",
-            r'.*\.pyi$': "A Python interface file defining type hints and function signatures for improved type checking",
-            r'.*\.js$': "A JavaScript source code file implementing client-side or server-side functionality with modern ES features",
-            r'.*\.ts$': "A TypeScript source code file providing type-safe implementations with interfaces and advanced type features",
-            r'.*\.jsx?$': "A React component file implementing UI components with JSX syntax and component lifecycle management",
-            r'.*\.tsx?$': "A TypeScript React component providing type-safe UI implementations with proper prop typing",
-            r'.*\.vue$': "A Vue.js component file implementing self-contained components with template, script, and style sections",
-            r'.*\.go$': "A Go source code file implementing efficient and concurrent functionality with strong type safety",
-            r'.*\.rs$': "A Rust source code file providing memory-safe implementations with ownership system and zero-cost abstractions",
-            r'.*\.java$': "A Java source code file implementing object-oriented functionality with strong typing and platform independence",
-            r'.*\.kt$': "A Kotlin source code file offering modern language features with Java interoperability and null safety",
-            r'.*\.swift$': "A Swift source code file implementing iOS/macOS functionality with modern syntax and strong type safety",
-            r'.*\.c$': "A C source code file implementing low-level system functionality with manual memory management",
-            r'.*\.cpp$': "A C++ source code file providing object-oriented implementations with modern C++ features and STL",
-            r'.*\.cs$': "A C# source code file implementing .NET functionality with modern language features and type safety",
-            r'.*\.rb$': "A Ruby source code file offering dynamic programming with elegant syntax and metaprogramming features",
-            r'.*\.php$': "A PHP source code file implementing server-side functionality with modern PHP features and type declarations",
-            
-            # Build and dependency files
-            r'.*requirements.*\.txt$': "A Python dependency specification file listing required packages with version constraints",
-            r'.*Pipfile$': "A modern Python dependency management file using Pipenv for deterministic dependencies",
-            r'.*poetry\.toml$': "A Poetry configuration file for Python dependency management with advanced features",
-            r'.*Gemfile$': "A Ruby dependency specification file managing gem dependencies with Bundler",
-            r'.*package\.json$': "A Node.js project configuration file managing dependencies, scripts, and project metadata",
-            r'.*package-lock\.json$': "A detailed dependency lock file ensuring consistent installations across environments",
-            r'.*yarn\.lock$': "A Yarn dependency lock file providing deterministic dependency resolution",
-            r'.*Cargo\.toml$': "A Rust project configuration file managing dependencies and build settings",
-            r'.*Cargo\.lock$': "A Rust dependency lock file ensuring reproducible builds across environments",
-            r'.*pom\.xml$': "A Maven project configuration file managing Java dependencies and build lifecycle",
-            r'.*build\.gradle.*$': "A Gradle build configuration file defining build logic and dependencies with Groovy/Kotlin DSL",
-            r'.*CMakeLists\.txt$': "A CMake build configuration file defining build system generation for C/C++ projects",
-            r'.*Makefile$': "A Make build configuration file defining build rules and dependencies",
-            
-            # Test files
-            r'.*test.*\.py$': "A Python test file containing unit tests, integration tests, and test fixtures",
-            r'.*conftest\.py$': "A pytest configuration file defining shared test fixtures and configuration",
-            r'.*spec.*\.js$': "A JavaScript test specification file using behavior-driven development patterns",
-            r'.*test.*\.js$': "A JavaScript test file implementing unit and integration tests",
-            r'.*test.*\.ts$': "A TypeScript test file with type-safe test implementations",
-            r'.*Test\.java$': "A Java test file implementing JUnit tests with assertions and test lifecycle",
-            r'.*_test\.go$': "A Go test file implementing table-driven tests and benchmarks",
-            r'.*\.spec\.ts$': "A TypeScript test specification file with type-safe test implementations",
-            
-            # Script files
-            r'.*\.sh$': "A shell script automating system tasks and deployment processes",
-            r'.*\.bat$': "A Windows batch script automating Windows-specific tasks",
-            r'.*\.ps1$': "A PowerShell script implementing advanced Windows automation",
-            r'.*\.bash.*$': "A Bash script providing Unix shell automation with advanced features",
-            r'.*\.zsh.*$': "A Zsh script implementing shell automation with extended features",
-            
-            # Web files
-            r'.*\.html?$': "A HTML file defining web page structure and content with semantic markup",
-            r'.*\.css$': "A CSS file implementing styles and responsive layouts with modern features",
-            r'.*\.scss$': "A SASS stylesheet implementing modular styles with variables and mixins",
-            r'.*\.less$': "A LESS stylesheet providing dynamic styles with variables and functions",
-            r'.*\.styl$': "A Stylus stylesheet offering expressive styling with advanced features",
-            r'.*\.svg$': "A scalable vector graphics file defining resolution-independent graphics",
-            r'.*\.woff2?$': "A web font file providing custom typography for web applications",
-            r'.*\.eot$': "An embedded OpenType font file for legacy web browser support",
-            r'.*\.ttf$': "A TrueType font file for custom typography across platforms",
-            r'.*\.otf$': "An OpenType font file supporting advanced typography features",
-            
-            # Data files
-            r'.*\.sql$': "A SQL file containing database schema definitions and complex queries",
-            r'.*\.csv$': "A comma-separated values file storing tabular data in a text format",
-            r'.*\.json$': "A JSON data file storing structured data with nested objects and arrays",
-            r'.*\.xml$': "An XML data file storing hierarchical data with schema validation",
-            r'.*\.proto$': "A Protocol Buffers definition file for efficient data serialization",
-            r'.*\.graphql$': "A GraphQL schema file defining API types and operations",
-            r'.*\.avro$': "An Apache Avro data file for efficient data serialization",
-            r'.*\.parquet$': "A Parquet columnar storage file optimized for big data processing",
-            r'.*\.yaml$': "A YAML data file storing configuration in a human-readable format",
-            r'.*\.toml$': "A TOML data file offering clear and minimal syntax for configurations",
-            r'.*\.ini$': "An INI configuration file using simple key-value pair format",
-            r'.*\.env$': "An environment file storing sensitive configuration variables",
-            
-            # Image files
-            r'.*\.png$': "A PNG image file providing lossless compression for graphics",
-            r'.*\.jpe?g$': "A JPEG image file using lossy compression for photographs",
-            r'.*\.gif$': "A GIF image file supporting simple animations and transparency",
-            r'.*\.webp$': "A WebP image file offering superior compression and quality",
-            r'.*\.ico$': "An icon file containing multiple sizes for favicon display",
-            r'.*\.bmp$': "A bitmap image file storing uncompressed pixel data",
-            
-            # Media files
-            r'.*\.mp4$': "An MP4 video file using efficient video compression",
-            r'.*\.webm$': "A WebM video file optimized for web streaming",
-            r'.*\.mp3$': "An MP3 audio file with lossy compression for music",
-            r'.*\.wav$': "A WAV audio file storing uncompressed audio data",
-            r'.*\.ogg$': "An OGG container file for audio and video content",
-            r'.*\.flac$': "A FLAC audio file providing lossless audio compression",
-            
-            # Document files
-            r'.*\.pdf$': "A PDF document file preserving formatting across platforms",
-            r'.*\.docx?$': "A Microsoft Word document file for rich text content",
-            r'.*\.xlsx?$': "A Microsoft Excel spreadsheet file for tabular data",
-            r'.*\.pptx?$': "A Microsoft PowerPoint presentation file",
-            r'.*\.odt$': "An OpenDocument text file for cross-platform compatibility",
-            r'.*\.ods$': "An OpenDocument spreadsheet for open-source compatibility",
-            
-            # Archive files
-            r'.*\.zip$': "A ZIP archive file containing compressed files and folders",
-            r'.*\.tar$': "A TAR archive file bundling multiple files together",
-            r'.*\.gz$': "A GZIP compressed file for efficient storage",
-            r'.*\.7z$': "A 7-Zip archive offering high compression ratios",
-            r'.*\.rar$': "A RAR archive file with advanced compression features",
-            
-            # Mobile development
-            r'.*\.swift$': "A Swift source file for iOS and macOS development",
-            r'.*\.kt$': "A Kotlin source file for Android development",
-            r'.*\.xcodeproj$': "An Xcode project configuration for iOS development",
-            r'.*\.pbxproj$': "An Xcode project file defining build settings",
-            r'.*\.storyboard$': "An iOS storyboard file defining UI flow and layout",
-            r'.*\.xib$': "An iOS interface builder file for UI components",
-            r'.*\.gradle$': "A Gradle build configuration file for Android projects",
-            
-            # Development directories
-            r'.*ci.*': "Continuous Integration directory containing pipeline configurations",
-            r'.*deploy.*': "Deployment directory containing deployment scripts and configs",
-            r'.*docker.*': "Docker directory containing container configurations",
-            r'.*k8s.*': "Kubernetes directory containing cluster configurations",
-            r'.*terraform.*': "Infrastructure as Code directory for cloud resources",
-            r'.*ansible.*': "Configuration management directory for automation",
-            r'.*helm.*': "Helm charts directory for Kubernetes deployments",
-            r'.*nginx.*': "Nginx configuration directory for web serving",
-            r'.*apache.*': "Apache configuration directory for web serving",
-            
-            # Feature-specific directories
-            r'.*auth.*': "Authentication directory handling user authentication",
-            r'.*search.*': "Search functionality directory implementing search features",
-            r'.*upload.*': "File upload directory managing file uploads",
-            r'.*payment.*': "Payment processing directory handling transactions",
-            r'.*notification.*': "Notification system directory managing alerts",
-            r'.*analytics.*': "Analytics directory tracking user behavior",
-            r'.*monitoring.*': "Monitoring directory for system health checks",
-            r'.*backup.*': "Backup directory containing data backups",
-            r'.*security.*': "Security directory implementing protection measures",
-            
-            # Framework-specific directories
-            r'.*redux.*': "Redux state management directory",
-            r'.*vuex.*': "Vuex state management for Vue.js",
-            r'.*mobx.*': "MobX state management directory",
-            r'.*graphql.*': "GraphQL API implementation directory",
-            r'.*websocket.*': "WebSocket implementation directory",
-            r'.*worker.*': "Worker processes directory for background tasks",
-            r'.*queue.*': "Queue processing directory for async tasks",
-            r'.*cache.*': "Cache management directory for performance",
-            r'.*proxy.*': "Proxy configuration directory for routing",
-            
-            # Quality assurance directories
-            r'.*qa.*': "Quality Assurance directory for testing resources",
-            r'.*benchmark.*': "Benchmarking directory for performance tests",
-            r'.*stress-test.*': "Stress testing directory for load testing",
-            r'.*coverage.*': "Code coverage directory for test reports",
-            r'.*lint.*': "Linting configuration directory for code quality",
-            r'.*audit.*': "Security audit directory for vulnerability checks",
-            r'.*review.*': "Code review directory for review processes",
-            
-            # Documentation directories
-            r'.*wiki.*': "Wiki directory containing project documentation",
-            r'.*manual.*': "User manual directory with usage guides",
-            r'.*reference.*': "API reference documentation directory",
-            r'.*guide.*': "User guide directory with tutorials",
-            r'.*example.*': "Example code directory with demos",
-            r'.*sample.*': "Sample projects directory with templates",
-            r'.*showcase.*': "Showcase directory highlighting features"
-        }
-        
-        # Directory role patterns
-        directory_patterns = {
-            r'.*src.*': "Source code directory containing the main application implementation files",
-            r'.*test.*': "Test directory containing unit tests, integration tests, and test resources",
-            r'.*docs?.*': "Documentation directory storing project documentation, guides, and API references",
-            r'.*config.*': "Configuration directory containing various application and environment configurations",
-            r'.*scripts?.*': "Scripts directory containing automation scripts and development tools",
-            r'.*tools?.*': "Development tools directory containing utilities and helper scripts",
-            r'.*assets?.*': "Assets directory storing static resources like images, fonts, and media files",
-            r'.*templates?.*': "Templates directory containing reusable template files and code generators",
-            r'.*public.*': "Public directory containing publicly accessible static files and resources",
-            r'.*private.*': "Private directory storing sensitive resources and internal configurations",
-            r'.*dist.*': "Distribution directory containing built and optimized production files",
-            r'.*build.*': "Build directory containing compilation outputs and build artifacts",
-            r'.*vendor.*': "Third-party dependencies directory managed by package managers",
-            r'.*node_modules.*': "Node.js dependencies directory containing installed npm packages",
-            r'.*venv.*': "Python virtual environment directory isolating project dependencies",
-            r'.*bin.*': "Binary directory containing executable files and compiled outputs",
-            r'.*lib.*': "Library directory containing shared code libraries and modules",
-            r'.*api.*': "API directory implementing backend services and API endpoints",
-            r'.*ui.*': "User interface directory containing frontend components and layouts",
-            r'.*utils?.*': "Utilities directory containing helper functions and shared code",
-            r'.*helpers?.*': "Helpers directory providing utility functions and common operations",
-            r'.*models?.*': "Models directory containing data models and database schemas",
-            r'.*controllers?.*': "Controllers directory implementing business logic and request handling",
-            r'.*views?.*': "Views directory containing UI templates and view components",
-            r'.*services?.*': "Services directory implementing business logic and external integrations",
-            r'.*middleware.*': "Middleware directory containing request/response processing components",
-            r'.*migrations?.*': "Migrations directory managing database schema changes and data migrations",
-            r'.*static.*': "Static files directory containing unchanging assets and resources",
-            r'.*media.*': "Media directory storing user-uploaded files and media content",
-            r'.*logs?.*': "Logs directory containing application logs and error tracking",
-            r'.*cache.*': "Cache directory storing temporary data for performance optimization",
-            r'.*backup.*': "Backup directory containing data backups and recovery files",
-            r'.*hooks?.*': "Hooks directory containing Git hooks and event handlers",
-            r'.*plugins?.*': "Plugins directory containing extensible plugin implementations",
-            r'.*packages?.*': "Packages directory managing multiple related packages in a monorepo",
-            r'.*modules?.*': "Modules directory containing modular application components",
-            r'.*components?.*': "Components directory storing reusable UI components",
-            r'.*layouts?.*': "Layouts directory containing page layouts and templates",
-            r'.*pages?.*': "Pages directory implementing route-based page components",
-            r'.*styles?.*': "Styles directory containing CSS and styling resources",
-            r'.*themes?.*': "Themes directory managing different visual themes",
-            r'.*locales?.*': "Locales directory containing internationalization resources",
-            r'.*constants?.*': "Constants directory defining shared constant values",
-            r'.*types?.*': "Types directory containing TypeScript type definitions",
-            r'.*interfaces?.*': "Interfaces directory defining TypeScript interfaces",
-            r'.*contexts?.*': "Contexts directory implementing React context providers",
-            r'.*reducers?.*': "Reducers directory containing state management logic",
-            r'.*actions?.*': "Actions directory defining state management actions",
-            r'.*store.*': "Store directory implementing state management configuration",
-            r'.*fixtures?.*': "Fixtures directory containing test data and mock objects",
-            r'.*mocks?.*': "Mocks directory containing mock implementations for testing",
-            r'.*coverage.*': "Coverage directory containing test coverage reports",
-            r'.*reports?.*': "Reports directory storing various analysis reports",
-            r'.*examples?.*': "Examples directory containing sample code and usage examples",
-            r'.*tutorials?.*': "Tutorials directory providing learning resources and guides"
-        }
+        # Load patterns from JSON file
+        patterns_file = os.path.join(os.path.dirname(__file__), 'templates', 'component_explanations.json')
+        try:
+            with open(patterns_file, 'r', encoding='utf-8') as f:
+                patterns = json.load(f)
+                file_patterns = patterns.get('file_patterns', {})
+                directory_patterns = patterns.get('directory_patterns', {})
+        except Exception as e:
+            print(f"Error loading component explanations: {e}")
+            return {}
         
         for component in components:
             clean_name = component.strip().split(' ')[-1]  # Remove emoji and get last part
             
             # Check if it's a directory
             if '\ud83d\udcc1' in component:  # Folder emoji
-                explanation = "Project directory containing related files and resources"
+                explanation = None
                 for pattern, desc in directory_patterns.items():
                     if re.search(pattern, clean_name, re.IGNORECASE):
                         explanation = desc
                         break
+                if explanation is None:
+                    explanation = "Project directory containing related files and resources"
                 explanations[clean_name] = explanation
                 continue
             
             # Check file patterns
-            explanation = "Project file containing application code or resources"
+            explanation = None
             for pattern, desc in file_patterns.items():
                 if re.search(pattern, clean_name, re.IGNORECASE):
                     explanation = desc
                     break
+            if explanation is None:
+                explanation = "Project file containing application code or resources"
             explanations[clean_name] = explanation
                 
         return explanations
