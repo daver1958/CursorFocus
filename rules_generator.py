@@ -160,7 +160,14 @@ class RulesGenerator:
                 'follow React performance best practices',
                 'implement proper form handling',
                 'use proper routing strategies',
-                'follow proper security practices'
+                'follow proper security practices',
+                'use proper data fetching patterns',
+                'implement proper authentication flow',
+                'use proper caching strategies',
+                'follow proper testing practices',
+                'implement proper SEO practices',
+                'use proper accessibility patterns',
+                'follow proper deployment practices'
             ],
             'react-ts': [
                 'use proper TypeScript interfaces for props',
@@ -169,7 +176,15 @@ class RulesGenerator:
                 'implement proper type guards',
                 'use discriminated unions for state',
                 'leverage TypeScript utility types',
-                'use proper type assertions'
+                'use proper type assertions',
+                'implement proper error type handling',
+                'use proper async type patterns',
+                'follow TypeScript best practices',
+                'use proper module declarations',
+                'implement proper type testing',
+                'use proper type inference',
+                'follow proper type organization',
+                'implement proper type documentation'
             ],
             'next': [
                 'use proper page routing',
@@ -178,7 +193,15 @@ class RulesGenerator:
                 'leverage Next.js Image component',
                 'implement proper dynamic imports',
                 'use API routes effectively',
-                'follow Next.js project structure'
+                'follow Next.js project structure',
+                'implement proper middleware',
+                'use proper caching strategies',
+                'follow proper deployment practices',
+                'implement proper authentication',
+                'use proper environment variables',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper SEO practices'
             ],
             'next-ts': [
                 'use TypeScript path aliases',
@@ -187,7 +210,13 @@ class RulesGenerator:
                 'leverage Next.js TypeScript utilities',
                 'implement proper type-safe routing',
                 'use proper TypeScript configuration',
-                'follow Next.js TypeScript best practices'
+                'follow Next.js TypeScript best practices',
+                'implement proper type testing',
+                'use proper type inference',
+                'follow proper type organization',
+                'implement proper type documentation',
+                'use proper module declarations',
+                'follow proper type safety practices'
             ],
             'vue': [
                 'use composition API',
@@ -196,7 +225,15 @@ class RulesGenerator:
                 'implement proper component lifecycle',
                 'use proper event handling',
                 'leverage Vue directives',
-                'follow Vue.js style guide'
+                'follow Vue.js style guide',
+                'implement proper routing',
+                'use proper state management',
+                'follow proper testing practices',
+                'implement proper form handling',
+                'use proper component communication',
+                'follow proper security practices',
+                'implement proper error handling',
+                'use proper performance optimization'
             ],
             'vue-ts': [
                 'use proper TypeScript decorators',
@@ -205,7 +242,13 @@ class RulesGenerator:
                 'leverage Vue class components',
                 'use proper TypeScript configuration',
                 'implement proper type guards',
-                'follow Vue.js TypeScript best practices'
+                'follow Vue.js TypeScript best practices',
+                'use proper type inference',
+                'implement proper type testing',
+                'follow proper type organization',
+                'use proper module declarations',
+                'implement proper type documentation',
+                'follow proper type safety practices'
             ],
             'angular': [
                 'follow angular style guide',
@@ -214,47 +257,150 @@ class RulesGenerator:
                 'use proper dependency injection',
                 'implement proper routing',
                 'use proper form handling',
-                'follow Angular project structure'
+                'follow Angular project structure',
+                'implement proper services',
+                'use proper component communication',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper state management',
+                'follow proper security practices',
+                'implement proper performance optimization',
+                'use proper lazy loading'
             ],
             'django': [
                 'follow Django best practices',
                 'use class-based views when appropriate',
-                'implement proper model relationships'
+                'implement proper model relationships',
+                'use proper form handling',
+                'implement proper authentication',
+                'use proper middleware',
+                'follow proper security practices',
+                'implement proper caching',
+                'use proper database optimization',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper static files handling',
+                'follow proper deployment practices',
+                'implement proper API design',
+                'use proper template inheritance'
             ],
             'flask': [
                 'use Flask blueprints for organization',
                 'implement proper error handling',
-                'use Flask-SQLAlchemy for database operations'
+                'use Flask-SQLAlchemy for database operations',
+                'implement proper authentication',
+                'use proper request handling',
+                'follow proper security practices',
+                'implement proper caching',
+                'use proper configuration management',
+                'follow proper testing practices',
+                'implement proper logging',
+                'use proper database migration',
+                'follow proper deployment practices',
+                'implement proper API design',
+                'use proper template organization'
             ],
             'laravel': [
                 'follow Laravel best practices',
                 'use Laravel naming conventions',
-                'implement proper model relationships'
+                'implement proper model relationships',
+                'use proper middleware',
+                'implement proper authentication',
+                'use proper request validation',
+                'follow proper security practices',
+                'implement proper caching',
+                'use proper database optimization',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper queue management',
+                'follow proper deployment practices',
+                'implement proper API design',
+                'use proper blade templates'
             ],
             'symfony': [
                 'follow Symfony best practices',
                 'use dependency injection',
-                'implement proper service architecture'
+                'implement proper service architecture',
+                'use proper routing',
+                'implement proper authentication',
+                'use proper form handling',
+                'follow proper security practices',
+                'implement proper caching',
+                'use proper database optimization',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper event handling',
+                'follow proper deployment practices',
+                'implement proper API design',
+                'use proper twig templates'
             ],
             'wordpress': [
                 'follow WordPress coding standards',
                 'use WordPress hooks properly',
-                'implement proper plugin/theme structure'
+                'implement proper plugin/theme structure',
+                'use proper database queries',
+                'implement proper security measures',
+                'use proper template hierarchy',
+                'follow proper performance practices',
+                'implement proper error handling',
+                'use proper internationalization',
+                'follow proper testing practices',
+                'implement proper caching',
+                'use proper asset management',
+                'follow proper deployment practices',
+                'implement proper custom post types',
+                'use proper taxonomies'
             ],
             'swiftui': [
                 'use SwiftUI view modifiers',
                 'implement proper state management',
-                'follow SwiftUI lifecycle'
+                'follow SwiftUI lifecycle',
+                'use proper data flow',
+                'implement proper navigation',
+                'use proper animations',
+                'follow proper performance practices',
+                'implement proper error handling',
+                'use proper accessibility',
+                'follow proper testing practices',
+                'implement proper localization',
+                'use proper asset management',
+                'follow proper deployment practices',
+                'implement proper custom views',
+                'use proper gestures'
             ],
             'jetpack compose': [
                 'use Compose best practices',
                 'implement proper state hoisting',
-                'follow Compose lifecycle'
+                'follow Compose lifecycle',
+                'use proper composables',
+                'implement proper navigation',
+                'use proper animations',
+                'follow proper performance practices',
+                'implement proper error handling',
+                'use proper accessibility',
+                'follow proper testing practices',
+                'implement proper theming',
+                'use proper asset management',
+                'follow proper deployment practices',
+                'implement proper custom layouts',
+                'use proper gestures'
             ],
             'spring boot': [
                 'follow Spring Boot conventions',
                 'use dependency injection',
-                'implement proper service architecture'
+                'implement proper service architecture',
+                'use proper repository pattern',
+                'implement proper security',
+                'use proper validation',
+                'follow proper testing practices',
+                'implement proper error handling',
+                'use proper caching',
+                'follow proper deployment practices',
+                'implement proper logging',
+                'use proper configuration',
+                'follow proper documentation practices',
+                'implement proper API design',
+                'use proper database migration'
             ],
             'fastapi': [
                 'use proper dependency injection',
@@ -263,7 +409,15 @@ class RulesGenerator:
                 'implement proper security middleware',
                 'use proper response models',
                 'follow FastAPI best practices',
-                'implement proper error handling'
+                'implement proper error handling',
+                'use proper validation',
+                'follow proper testing practices',
+                'implement proper documentation',
+                'use proper database integration',
+                'follow proper deployment practices',
+                'implement proper API versioning',
+                'use proper background tasks',
+                'follow proper logging practices'
             ],
             'express': [
                 'use proper middleware patterns',
@@ -272,7 +426,15 @@ class RulesGenerator:
                 'implement proper authentication',
                 'follow Express.js best practices',
                 'use proper database integration',
-                'implement proper API versioning'
+                'implement proper API versioning',
+                'use proper validation',
+                'follow proper testing practices',
+                'implement proper logging',
+                'use proper security measures',
+                'follow proper deployment practices',
+                'implement proper rate limiting',
+                'use proper caching strategies',
+                'follow proper documentation practices'
             ],
             'nest': [
                 'use proper decorators',
@@ -281,7 +443,15 @@ class RulesGenerator:
                 'follow NestJS architecture patterns',
                 'implement proper guards and interceptors',
                 'use proper exception filters',
-                'follow proper testing practices'
+                'follow proper testing practices',
+                'implement proper validation',
+                'use proper database integration',
+                'follow proper documentation practices',
+                'implement proper caching',
+                'use proper security measures',
+                'follow proper deployment practices',
+                'implement proper microservices',
+                'use proper logging'
             ],
             'nuxt': [
                 'use proper Nuxt.js modules',
@@ -290,7 +460,49 @@ class RulesGenerator:
                 'follow Nuxt.js directory structure',
                 'implement proper state management',
                 'use proper middleware',
-                'follow Nuxt.js best practices'
+                'follow Nuxt.js best practices',
+                'implement proper error handling',
+                'use proper SEO practices',
+                'follow proper testing practices',
+                'implement proper authentication',
+                'use proper caching strategies',
+                'follow proper deployment practices',
+                'implement proper internationalization',
+                'use proper asset optimization'
+            ],
+            'gatsby': [
+                'use proper Gatsby plugins',
+                'implement proper data sourcing',
+                'use proper GraphQL queries',
+                'follow Gatsby project structure',
+                'implement proper image optimization',
+                'use proper SEO practices',
+                'follow proper performance practices',
+                'implement proper routing',
+                'use proper state management',
+                'follow proper testing practices',
+                'implement proper authentication',
+                'use proper build optimization',
+                'follow proper deployment practices',
+                'implement proper internationalization',
+                'use proper asset management'
+            ],
+            'svelte': [
+                'use proper component structure',
+                'implement proper state management',
+                'use proper reactivity patterns',
+                'follow Svelte best practices',
+                'implement proper transitions',
+                'use proper stores',
+                'follow proper testing practices',
+                'implement proper routing',
+                'use proper form handling',
+                'follow proper performance practices',
+                'implement proper error handling',
+                'use proper TypeScript integration',
+                'follow proper deployment practices',
+                'implement proper accessibility',
+                'use proper animation patterns'
             ]
         }
         return framework_rules.get(framework.lower(), [])
@@ -311,7 +523,19 @@ class RulesGenerator:
                 'implement proper logging',
                 'use proper dependency management',
                 'follow proper testing practices',
-                'implement proper configuration management'
+                'implement proper configuration management',
+                'use proper docstring format',
+                'follow proper import organization',
+                'implement proper class inheritance',
+                'use proper property decorators',
+                'follow proper metaclass usage',
+                'implement proper iterator patterns',
+                'use proper generator patterns',
+                'follow proper memory management',
+                'implement proper concurrency patterns',
+                'use proper serialization methods',
+                'follow proper database access patterns',
+                'implement proper CLI interfaces'
             ],
             'javascript': [
                 'use modern ES features',
@@ -320,7 +544,20 @@ class RulesGenerator:
                 'leverage async/await',
                 'use destructuring assignment',
                 'implement proper error boundaries',
-                'use modern module imports'
+                'use modern module imports',
+                'follow proper promise patterns',
+                'implement proper event handling',
+                'use proper closure patterns',
+                'follow proper prototype usage',
+                'implement proper memory management',
+                'use proper regex patterns',
+                'follow proper DOM manipulation',
+                'implement proper web APIs usage',
+                'use proper data structures',
+                'follow proper security practices',
+                'implement proper error handling',
+                'use proper debugging techniques',
+                'follow proper performance optimization'
             ],
             'typescript': [
                 'use strict type checking',
@@ -336,7 +573,13 @@ class RulesGenerator:
                 'leverage mapped types',
                 'use proper enum patterns',
                 'implement proper error types',
-                'use proper async/await types'
+                'use proper async/await types',
+                'follow proper type organization',
+                'implement proper decorator patterns',
+                'use proper namespace organization',
+                'follow proper type inheritance',
+                'implement proper conditional types',
+                'use proper index types'
             ],
             'tsx': [
                 'use proper component typing',
@@ -352,7 +595,13 @@ class RulesGenerator:
                 'use proper style typing',
                 'leverage type-safe routing',
                 'use proper form typing',
-                'implement proper API types'
+                'implement proper API types',
+                'follow proper component organization',
+                'use proper state management types',
+                'implement proper test typing',
+                'use proper animation typing',
+                'follow proper accessibility typing',
+                'implement proper error boundary types'
             ],
             'java': [
                 'follow Java code conventions',
@@ -361,7 +610,20 @@ class RulesGenerator:
                 'use builder pattern for complex objects',
                 'leverage streams and lambdas',
                 'implement proper exception handling',
-                'use dependency injection'
+                'use dependency injection',
+                'follow proper package organization',
+                'implement proper generics usage',
+                'use proper collection frameworks',
+                'follow proper thread safety',
+                'implement proper serialization',
+                'use proper logging frameworks',
+                'follow proper testing practices',
+                'implement proper resource management',
+                'use proper annotation processing',
+                'follow proper memory management',
+                'implement proper IO handling',
+                'use proper security practices',
+                'follow proper documentation'
             ],
             'go': [
                 'follow Go idioms',
@@ -370,7 +632,20 @@ class RulesGenerator:
                 'use goroutines appropriately',
                 'leverage channels for communication',
                 'follow standard project layout',
-                'use context for cancellation'
+                'use context for cancellation',
+                'implement proper package organization',
+                'use proper pointer semantics',
+                'follow proper concurrency patterns',
+                'implement proper testing practices',
+                'use proper logging patterns',
+                'follow proper error wrapping',
+                'implement proper dependency management',
+                'use proper interface design',
+                'follow proper documentation',
+                'implement proper middleware patterns',
+                'use proper struct composition',
+                'follow proper memory management',
+                'implement proper HTTP handlers'
             ],
             'rust': [
                 'follow Rust idioms',
@@ -379,7 +654,20 @@ class RulesGenerator:
                 'use proper trait implementations',
                 'follow memory safety guidelines',
                 'use proper macro patterns',
-                'implement proper async patterns'
+                'implement proper async patterns',
+                'follow proper module organization',
+                'use proper lifetime annotations',
+                'implement proper generic constraints',
+                'use proper smart pointers',
+                'follow proper testing practices',
+                'implement proper concurrency patterns',
+                'use proper type system features',
+                'follow proper documentation',
+                'implement proper FFI interfaces',
+                'use proper unsafe blocks',
+                'follow proper error propagation',
+                'implement proper serialization',
+                'use proper dependency management'
             ],
             'php': [
                 'follow PSR standards',
@@ -388,7 +676,20 @@ class RulesGenerator:
                 'use modern PHP features',
                 'leverage dependency injection',
                 'implement interfaces properly',
-                'use namespaces effectively'
+                'use namespaces effectively',
+                'follow proper autoloading',
+                'implement proper testing practices',
+                'use proper database abstraction',
+                'follow proper security practices',
+                'implement proper session handling',
+                'use proper caching strategies',
+                'follow proper logging practices',
+                'implement proper validation',
+                'use proper configuration management',
+                'follow proper documentation',
+                'implement proper middleware',
+                'use proper composer management',
+                'follow proper deployment practices'
             ],
             'cpp': [
                 'follow modern C++ guidelines',
@@ -397,7 +698,20 @@ class RulesGenerator:
                 'use const correctness',
                 'leverage STL containers and algorithms',
                 'implement move semantics',
-                'use proper memory management'
+                'use proper memory management',
+                'follow proper template usage',
+                'implement proper exception handling',
+                'use proper operator overloading',
+                'follow proper inheritance patterns',
+                'implement proper copy/move operations',
+                'use proper namespace organization',
+                'follow proper compilation practices',
+                'implement proper testing strategies',
+                'use proper build systems',
+                'follow proper optimization practices',
+                'implement proper multithreading',
+                'use proper type traits',
+                'follow proper documentation'
             ],
             'csharp': [
                 'follow C# coding conventions',
@@ -406,7 +720,20 @@ class RulesGenerator:
                 'use async/await for asynchronous operations',
                 'prefer properties over public fields',
                 'leverage dependency injection',
-                'use proper exception handling'
+                'use proper exception handling',
+                'follow proper namespace organization',
+                'implement proper interface usage',
+                'use proper attribute decoration',
+                'follow proper event handling',
+                'implement proper generic constraints',
+                'use proper collection types',
+                'follow proper memory management',
+                'implement proper serialization',
+                'use proper reflection patterns',
+                'follow proper documentation',
+                'implement proper testing practices',
+                'use proper logging patterns',
+                'follow proper security guidelines'
             ],
             'ruby': [
                 'follow Ruby style guide',
@@ -415,7 +742,20 @@ class RulesGenerator:
                 'implement proper error handling',
                 'use modules for code organization',
                 'follow Ruby idioms',
-                'use proper gem structure'
+                'use proper gem structure',
+                'implement proper testing practices',
+                'use proper database access',
+                'follow proper documentation',
+                'implement proper validation',
+                'use proper configuration management',
+                'follow proper security practices',
+                'implement proper logging',
+                'use proper dependency management',
+                'follow proper deployment practices',
+                'implement proper API design',
+                'use proper caching strategies',
+                'follow proper performance optimization',
+                'implement proper background jobs'
             ],
             'kotlin': [
                 'use proper null safety',
@@ -424,7 +764,20 @@ class RulesGenerator:
                 'follow Kotlin idioms',
                 'implement proper data classes',
                 'use proper scope functions',
-                'follow proper functional programming patterns'
+                'follow proper functional programming patterns',
+                'implement proper testing practices',
+                'use proper collection operations',
+                'follow proper documentation',
+                'implement proper serialization',
+                'use proper dependency injection',
+                'follow proper concurrency patterns',
+                'implement proper DSL design',
+                'use proper delegation pattern',
+                'follow proper multiplatform practices',
+                'implement proper type-safe builders',
+                'use proper property delegation',
+                'follow proper interop with Java',
+                'implement proper Android patterns'
             ],
             'swift': [
                 'use proper optionals',
@@ -433,7 +786,20 @@ class RulesGenerator:
                 'follow Swift idioms',
                 'implement proper error handling',
                 'use proper memory management',
-                'follow proper concurrency patterns'
+                'follow proper concurrency patterns',
+                'implement proper testing practices',
+                'use proper collection types',
+                'follow proper documentation',
+                'implement proper dependency management',
+                'use proper access control',
+                'follow proper initialization patterns',
+                'implement proper generics usage',
+                'use proper property observers',
+                'follow proper extension usage',
+                'implement proper codable conformance',
+                'use proper result builders',
+                'follow proper SwiftUI integration',
+                'implement proper async/await patterns'
             ],
             'lua': [
                 'follow Lua style guide',
@@ -449,7 +815,13 @@ class RulesGenerator:
                 'use proper string manipulation',
                 'follow proper debugging practices',
                 'use proper package management',
-                'implement proper testing patterns'
+                'implement proper testing patterns',
+                'use proper performance optimization',
+                'follow proper security practices',
+                'implement proper sandboxing',
+                'use proper C API integration',
+                'follow proper game development patterns',
+                'implement proper data serialization'
             ]
         }
         return language_rules.get(language.lower(), [])
@@ -536,8 +908,28 @@ class RulesGenerator:
         """Get project-type specific rules and configurations."""
         type_rules = {
             'web application': {
-                'accessibility': {'required': True},
+                'accessibility': {
+                    'required': True,
+                    'standards': ['WCAG 2.1', 'WAI-ARIA 1.2'],
+                    'features': [
+                        'keyboard navigation',
+                        'screen reader support',
+                        'color contrast compliance',
+                        'focus management',
+                        'semantic HTML',
+                        'ARIA labels',
+                        'responsive design',
+                        'font scaling'
+                    ]
+                },
                 'performance': {
+                    'metrics': [
+                        'First Contentful Paint < 1.8s',
+                        'Time to Interactive < 3.8s',
+                        'Total Blocking Time < 200ms',
+                        'Cumulative Layout Shift < 0.1',
+                        'Largest Contentful Paint < 2.5s'
+                    ],
                     'prefer': [
                         'code splitting',
                         'lazy loading',
@@ -548,16 +940,12 @@ class RulesGenerator:
                         'proper bundle optimization',
                         'efficient state management',
                         'proper TypeScript configuration',
-                        'optimized type checking'
-                    ]
-                },
-                'typescript': {
-                    'required': [
-                        'strict type checking',
-                        'proper tsconfig setup',
-                        'type-safe API calls',
-                        'proper error handling types',
-                        'proper state management types'
+                        'optimized type checking',
+                        'image optimization',
+                        'resource preloading',
+                        'service worker implementation',
+                        'efficient data fetching',
+                        'proper CDN usage'
                     ]
                 },
                 'security': {
@@ -566,19 +954,52 @@ class RulesGenerator:
                         'XSS prevention',
                         'SQL injection prevention',
                         'secure session handling',
-                        'input validation'
+                        'input validation',
+                        'proper authentication',
+                        'secure password storage',
+                        'rate limiting',
+                        'secure headers',
+                        'CORS configuration',
+                        'content security policy',
+                        'secure cookie handling',
+                        'proper error handling',
+                        'secure file uploads',
+                        'dependency scanning'
+                    ]
+                },
+                'testing': {
+                    'coverage_threshold': 80,
+                    'types': [
+                        'unit tests',
+                        'integration tests',
+                        'end-to-end tests',
+                        'performance tests',
+                        'accessibility tests',
+                        'security tests',
+                        'visual regression tests',
+                        'load tests'
                     ]
                 }
             },
             'mobile application': {
                 'performance': {
+                    'metrics': [
+                        'app size < 50MB',
+                        'startup time < 2s',
+                        'frame rate > 60fps',
+                        'memory usage < 200MB'
+                    ],
                     'prefer': [
                         'offline first',
                         'battery optimization',
                         'responsive design',
                         'efficient data caching',
                         'lazy image loading',
-                        'background task optimization'
+                        'background task optimization',
+                        'proper memory management',
+                        'efficient network usage',
+                        'proper state persistence',
+                        'optimized animations'
                     ]
                 },
                 'security': {
@@ -587,7 +1008,24 @@ class RulesGenerator:
                         'certificate pinning',
                         'biometric authentication',
                         'app signing',
-                        'secure network calls'
+                        'secure network calls',
+                        'anti-tampering measures',
+                        'secure key storage',
+                        'proper permissions handling',
+                        'secure deep linking',
+                        'proper encryption'
+                    ]
+                },
+                'user_experience': {
+                    'required': [
+                        'offline support',
+                        'proper error states',
+                        'loading indicators',
+                        'proper navigation patterns',
+                        'gesture support',
+                        'haptic feedback',
+                        'proper keyboard handling',
+                        'accessibility support'
                     ]
                 }
             },
@@ -598,16 +1036,37 @@ class RulesGenerator:
                         'API documentation',
                         'usage examples',
                         'installation guide',
-                        'contribution guidelines'
+                        'contribution guidelines',
+                        'type definitions',
+                        'versioning policy',
+                        'migration guides',
+                        'performance considerations',
+                        'security considerations',
+                        'troubleshooting guide'
                     ]
                 },
                 'testing': {
-                    'coverage_threshold': 90,
+                    'coverage_threshold': 95,
                     'required': [
                         'unit tests',
                         'integration tests',
                         'performance benchmarks',
-                        'backwards compatibility tests'
+                        'backwards compatibility tests',
+                        'type checking',
+                        'documentation tests',
+                        'example tests',
+                        'cross-platform tests'
+                    ]
+                },
+                'packaging': {
+                    'required': [
+                        'proper versioning',
+                        'minimal dependencies',
+                        'tree-shaking support',
+                        'source maps',
+                        'type definitions',
+                        'proper exports',
+                        'proper peer dependencies'
                     ]
                 }
             },
@@ -618,14 +1077,32 @@ class RulesGenerator:
                         'progress indicators',
                         'help documentation',
                         'command completion',
-                        'consistent interface'
+                        'consistent interface',
+                        'proper exit codes',
+                        'proper signal handling',
+                        'interactive mode support',
+                        'proper terminal handling',
+                        'color support'
                     ]
                 },
                 'performance': {
                     'prefer': [
                         'minimal dependencies',
                         'efficient resource usage',
-                        'fast startup time'
+                        'fast startup time',
+                        'proper caching',
+                        'efficient file operations',
+                        'proper memory management',
+                        'efficient process handling'
+                    ]
+                },
+                'security': {
+                    'required': [
+                        'proper file permissions',
+                        'secure credential handling',
+                        'input sanitization',
+                        'proper environment handling',
+                        'secure temp file usage'
                     ]
                 }
             },
@@ -635,7 +1112,11 @@ class RulesGenerator:
                         'API specifications',
                         'endpoint documentation',
                         'authentication guide',
-                        'rate limiting details'
+                        'rate limiting details',
+                        'error responses',
+                        'example requests/responses',
+                        'versioning policy',
+                        'migration guides'
                     ]
                 },
                 'security': {
@@ -644,7 +1125,27 @@ class RulesGenerator:
                         'authorization',
                         'input validation',
                         'rate limiting',
-                        'logging and monitoring'
+                        'logging and monitoring',
+                        'proper error handling',
+                        'secure headers',
+                        'API key management',
+                        'request validation',
+                        'proper CORS configuration'
+                    ]
+                },
+                'performance': {
+                    'metrics': [
+                        'response time < 100ms',
+                        'throughput > 1000 rps',
+                        'error rate < 0.1%'
+                    ],
+                    'required': [
+                        'proper caching',
+                        'connection pooling',
+                        'query optimization',
+                        'proper indexing',
+                        'efficient serialization',
+                        'proper load balancing'
                     ]
                 }
             },
@@ -654,7 +1155,11 @@ class RulesGenerator:
                         'modular pipeline structure',
                         'reproducible experiments',
                         'version controlled datasets',
-                        'documented preprocessing steps'
+                        'documented preprocessing steps',
+                        'proper model versioning',
+                        'experiment tracking',
+                        'proper feature engineering',
+                        'proper model evaluation'
                     ]
                 },
                 'documentation': {
@@ -662,17 +1167,40 @@ class RulesGenerator:
                         'methodology documentation',
                         'data dictionaries',
                         'model evaluation metrics',
+                        'experiment tracking',
+                        'feature documentation',
+                        'model architecture',
+                        'training procedures',
+                        'validation methods'
+                    ]
+                },
+                'reproducibility': {
+                    'required': [
+                        'environment management',
+                        'seed setting',
+                        'data versioning',
+                        'model versioning',
+                        'parameter logging',
                         'experiment tracking'
                     ]
                 }
             },
             'game': {
                 'performance': {
+                    'metrics': [
+                        'frame rate > 60fps',
+                        'load time < 5s',
+                        'memory usage < 1GB'
+                    ],
                     'prefer': [
                         'efficient resource loading',
                         'frame rate optimization',
                         'memory management',
-                        'asset optimization'
+                        'asset optimization',
+                        'proper batching',
+                        'efficient rendering',
+                        'proper physics optimization',
+                        'proper audio management'
                     ]
                 },
                 'architecture': {
@@ -680,7 +1208,87 @@ class RulesGenerator:
                         'component-based design',
                         'event-driven systems',
                         'efficient state management',
-                        'modular systems'
+                        'modular systems',
+                        'proper scene management',
+                        'proper resource management',
+                        'efficient input handling',
+                        'proper save system'
+                    ]
+                },
+                'user_experience': {
+                    'required': [
+                        'consistent frame rate',
+                        'responsive controls',
+                        'proper feedback',
+                        'proper saving system',
+                        'proper error handling',
+                        'accessibility options'
+                    ]
+                }
+            },
+            'desktop application': {
+                'performance': {
+                    'metrics': [
+                        'startup time < 3s',
+                        'memory usage < 500MB',
+                        'response time < 50ms'
+                    ],
+                    'prefer': [
+                        'efficient resource usage',
+                        'proper caching',
+                        'background processing',
+                        'proper memory management',
+                        'efficient file operations'
+                    ]
+                },
+                'user_experience': {
+                    'required': [
+                        'responsive interface',
+                        'proper error handling',
+                        'proper state persistence',
+                        'keyboard shortcuts',
+                        'system integration',
+                        'proper updates',
+                        'accessibility support'
+                    ]
+                },
+                'security': {
+                    'required': [
+                        'secure file operations',
+                        'proper permission handling',
+                        'secure data storage',
+                        'proper update mechanism',
+                        'secure IPC'
+                    ]
+                }
+            },
+            'blockchain': {
+                'security': {
+                    'required': [
+                        'secure key management',
+                        'proper transaction handling',
+                        'secure smart contracts',
+                        'proper consensus implementation',
+                        'secure networking',
+                        'proper cryptography usage'
+                    ]
+                },
+                'performance': {
+                    'prefer': [
+                        'efficient consensus',
+                        'proper transaction batching',
+                        'efficient state management',
+                        'proper network optimization',
+                        'efficient storage'
+                    ]
+                },
+                'reliability': {
+                    'required': [
+                        'proper error handling',
+                        'transaction validation',
+                        'state consistency',
+                        'proper synchronization',
+                        'proper backup mechanisms'
                     ]
                 }
             }
