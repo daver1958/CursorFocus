@@ -53,9 +53,10 @@ class RulesWatcher(FileSystemEventHandler):
             # Re-detect project type
             project_info = detect_project_type(self.project_path)
             
-            # Generate new rules
-            self.rules_generator.generate_rules_file(project_info)
-            print(f"Updated .cursorrules for project {self.project_id} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            # Generate new rules only if there are changes
+            rules_file = self.rules_generator.generate_rules_file(project_info)
+            if rules_file:  # Only log if file was actually updated
+                print(f"Updated .cursorrules for project {self.project_id} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         except Exception as e:
             print(f"Error updating .cursorrules for project {self.project_id}: {e}")
 

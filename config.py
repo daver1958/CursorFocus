@@ -4,14 +4,14 @@ import json
 def load_config():
     """Load configuration from config.json."""
     try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        config_path = os.path.join(script_dir, 'config.json')
-        
-        if os.path.exists(config_path):
-            with open(config_path, 'r') as f:
-                return json.load(f)
-        
-        return get_default_config()
+        with open('config.json', 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            
+        # Add auto_update setting to config if not present
+        if 'auto_update' not in config:
+            config['auto_update'] = False
+            
+        return config
     except Exception as e:
         print(f"Error loading config: {e}")
         return None
